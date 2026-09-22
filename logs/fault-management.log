@@ -1,0 +1,45 @@
+2026-09-23 01:53:50 INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-09-23 01:53:50 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 21968 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-23 01:53:50 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-23 01:53:50 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-23 01:53:50 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-23 01:53:50 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-23 01:53:50 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-23 01:53:51 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 31 ms. Found 1 JPA repository interface.
+2026-09-23 01:53:51 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-09-23 01:53:51 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-09-23 01:53:51 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-23 01:53:51 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-23 01:53:51 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-23 01:53:51 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1598 ms
+2026-09-23 01:53:52 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-23 01:53:52 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-09-23 01:53:52 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-23 01:53:52 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-23 01:53:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-23 01:53:52 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@71f4bfa1
+2026-09-23 01:53:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-23 01:53:53 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-23 01:53:53 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 01:53:53 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-23 01:53:53 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@772c3270, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2884fab3, org.springframework.security.web.context.SecurityContextHolderFilter@1ec040cd, org.springframework.security.web.header.HeaderWriterFilter@730dc94d, org.springframework.web.filter.CorsFilter@14e6d7d, org.springframework.security.web.csrf.CsrfFilter@14fe4167, org.springframework.security.web.authentication.logout.LogoutFilter@72cf00a7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5dd64c9c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5f482289, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@17887152, org.springframework.security.web.session.SessionManagementFilter@45b1a32e, org.springframework.security.web.access.ExceptionTranslationFilter@51712049, org.springframework.security.web.access.intercept.AuthorizationFilter@73b0997]
+2026-09-23 01:53:53 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-23 01:53:53 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-09-23 01:53:53 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-09-23 01:53:53 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 4.026 seconds (process running for 4.606)
+2026-09-23 01:54:36 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-23 01:54:36 INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-09-23 01:54:36 INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-09-23 01:58:21 INFO  com.infy.api.AuthAPI - Received login request for username: operator
+2026-09-23 01:58:21 INFO  com.infy.service.AuthServiceImpl - Login attempt for username: operator
+2026-09-23 01:58:21 WARN  com.infy.service.AuthServiceImpl - Login rejected - bad credentials for username: operator
+2026-09-23 01:58:21 WARN  com.infy.exception.GlobalExceptionHandler - Invalid credentials: Wrong username or password
+2026-09-23 01:58:21 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver - Resolved [com.infy.exception.InvalidCredentialsException: Wrong username or password]
+2026-09-23 01:58:33 INFO  com.infy.api.AuthAPI - Received login request for username: operator1
+2026-09-23 01:58:33 INFO  com.infy.service.AuthServiceImpl - Login attempt for username: operator1
+2026-09-23 01:58:33 INFO  com.infy.service.AuthServiceImpl - Login succeeded for username: operator1 with role: OPERATOR
+2026-09-23 02:02:54 INFO  com.infy.api.AuthAPI - Received logout request
+2026-09-23 02:02:54 INFO  com.infy.service.AuthServiceImpl - Logout requested for username: operator1
+2026-09-23 02:04:45 INFO  com.infy.api.AuthAPI - Received login request for username: admin1
+2026-09-23 02:04:45 INFO  com.infy.service.AuthServiceImpl - Login attempt for username: admin1
+2026-09-23 02:04:45 INFO  com.infy.service.AuthServiceImpl - Login succeeded for username: admin1 with role: ADMIN
