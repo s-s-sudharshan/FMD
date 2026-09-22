@@ -18,8 +18,8 @@
 
 | Library | Version | Purpose | Where used |
 |---|---|---|---|
-| ModelMapper | 3.2.4 | Entity ↔ DTO conversion | A single `ModelMapperConfig` `@Configuration` bean, created once in Phase 0, injected into every service that needs entity↔DTO mapping (all of Section 5). |
-| Log4j2 | 2.19.0 | Application logging | Replaces Spring Boot's default Logback. Excluded via a `spring-boot-starter-logging` exclusion on `spring-boot-starter-web`, added via `spring-boot-starter-log4j2`. Config file `src/main/resources/log4j2.properties` (matching your existing project's format, rather than the XML alternative). Logging added at: controller entry (request received), service-layer key decisions (validation failures, state transitions), and in `GlobalExceptionHandler` (every caught exception logged with stack trace at `ERROR`, validation-type failures at `WARN`). |
+| ModelMapper | 2.3.5 | Entity ↔ DTO conversion | A single `ModelMapperConfig` `@Configuration` bean, created once in Phase 0, injected into every service that needs entity↔DTO mapping (all of Section 5). |
+| Log4j2 | 2.20.0 | Application logging | Replaces Spring Boot's default Logback. Excluded via a `spring-boot-starter-logging` exclusion on `spring-boot-starter-web`, added via `spring-boot-starter-log4j2`. Config file `src/main/resources/log4j2.properties` (matching your existing project's format, rather than the XML alternative). Logging added at: controller entry (request received), service-layer key decisions (validation failures, state transitions), and in `GlobalExceptionHandler` (every caught exception logged with stack trace at `ERROR`, validation-type failures at `WARN`). |
 | Lombok | latest stable | Boilerplate reduction | All entities and DTOs (see Sections 2 and 4 for per-class annotation guidance). |
 
 **Maven dependencies to add (Phase 0):**
@@ -27,7 +27,7 @@
 <dependency>
     <groupId>org.modelmapper</groupId>
     <artifactId>modelmapper</artifactId>
-    <version>3.2.4</version>
+    <version>2.3.5</version>
 </dependency>
 
 <dependency>
