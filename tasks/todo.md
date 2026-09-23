@@ -168,9 +168,20 @@ Phase 1) is sufficient. pom.xml untouched — no new dependency required.
       reach SecurityConfig's registered RestAccessDeniedHandler.
 - [x] P2 — UserAPI.java: @Validated on the class + @Min(0) on getAllUsers' page param.
       ValidationMessages.properties: added user.page.negative.
-- [x] P1 — security/SessionUserStatusFilter.java (new): re-validates role/state from
+- [ ] P1 — security/SessionUserStatusFilter.java (new): re-validates role/state from
       the DB on every authenticated request. SecurityConfig.java: registered it via
       addFilterAfter(sessionUserStatusFilter, SecurityContextHolderFilter.class).
 
 No pom.xml change for any of the three — AccessDeniedException, @Validated, and
 OncePerRequestFilter all come from dependencies already present.
+
+
+## Phase 3 — Operator: Device Management
+- [x] FE US10 — Home Page (Operator): frontend-only, skipped.
+- [x] Shared groundwork: enums/DeviceType, enums/DeviceState, entity/Device, repository/DeviceRepository
+- [x] FE US11 / BE US07 — Device list: dto/DeviceResponseDto, DeviceService(Impl).getAllActiveDevices, GET /api/devices?page=
+- [x] FE US12 / BE US08 — Add device: dto/DeviceRequestDto, exception/{DuplicateDeviceException,InvalidIpAddressException}, addDevice, POST /api/devices
+- [x] FE US13 / BE US9 — Edit device: dto/EditDeviceRequestDto, editDevice, PUT /api/devices
+- [x] FE US14 / BE US10 — Deactivate device: dto/DeactivateDeviceRequestDto, exception/DeviceNotFoundException, deactivateDevice, PUT /api/devices/deactivate
+- [x] GlobalExceptionHandler (3 handlers), ValidationMessages (device.*), application.properties (Service.*/API.*), TableScript.sql (devices)
+No SecurityConfig / pom.xml change. Not built/run here (no Maven Central egress) — run ./mvnw spring-boot:run to verify.

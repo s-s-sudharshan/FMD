@@ -1,8 +1,7 @@
 package com.infy.entity;
 
-import com.infy.enums.Role;
-import com.infy.enums.SecretQuestion;
-import com.infy.enums.UserState;
+import com.infy.enums.DeviceState;
+import com.infy.enums.DeviceType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,44 +17,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Application user. Deliberately not annotated with Lombok's @Data (see
- * plan.md "Tech Stack Additions" -> Lombok usage convention): entities keep
- * an explicit @EqualsAndHashCode(of = "id") instead of an all-fields one, and
- * no @Data-generated toString() that could pull in lazy relations.
- */
+/** Monitored network device. No @Data on entities -- see plan.md Lombok convention. */
 @Entity
-@Table(name = "users")
+@Table(name = "devices")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class Device {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String serialNumber;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(nullable = false, unique = true)
+    private String ipAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private DeviceType deviceType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private UserState userState = UserState.ACTIVATED;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SecretQuestion secretQuestion;
-
-    @Column(nullable = false)
-    private String secretAnswer;
+    private DeviceState deviceState = DeviceState.ACTIVATED;
 }

@@ -39,3 +39,17 @@ INSERT INTO users (username, password, role, user_state, secret_question, secret
     ('manager3', '$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'MANAGER',  'ACTIVATED',   'FIRST_PET', 'fluffy'),
     ('operator6','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'ACTIVATED',   'BIRTH_CITY', 'fluffy');
     
+    
+CREATE TABLE IF NOT EXISTS devices (
+    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    serial_number VARCHAR(255) NOT NULL UNIQUE,
+    ip_address    VARCHAR(255) NOT NULL UNIQUE,
+    device_type   VARCHAR(50)  NOT NULL,
+    device_state  VARCHAR(50)  NOT NULL DEFAULT 'ACTIVATED'
+);
+
+INSERT INTO devices (serial_number, ip_address, device_type, device_state) VALUES
+    ('SN-1001', '192.168.1.10', 'ROUTER', 'ACTIVATED'),
+    ('SN-1002', '192.168.1.11', 'SWITCH', 'ACTIVATED'),
+    ('SN-1003', '192.168.1.12', 'HUB',    'ACTIVATED'),
+    ('SN-1004', '192.168.1.13', 'ROUTER', 'DEACTIVATED');

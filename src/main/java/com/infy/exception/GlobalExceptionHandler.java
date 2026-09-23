@@ -102,6 +102,27 @@ public class GlobalExceptionHandler {
         logger.warn("Invalid role change: {}", message);
         return buildResponse(HttpStatus.BAD_REQUEST, message, request);
     }
+    
+    @ExceptionHandler(DeviceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleDeviceNotFound(DeviceNotFoundException ex, HttpServletRequest request) {
+        String message = resolveMessage(ex);
+        logger.warn("Device not found: {}", message);
+        return buildResponse(HttpStatus.NOT_FOUND, message, request);
+    }
+
+    @ExceptionHandler(DuplicateDeviceException.class)
+    public ResponseEntity<ErrorResponseDto> handleDuplicateDevice(DuplicateDeviceException ex, HttpServletRequest request) {
+        String message = resolveMessage(ex);
+        logger.warn("Duplicate device: {}", message);
+        return buildResponse(HttpStatus.CONFLICT, message, request);
+    }
+
+    @ExceptionHandler(InvalidIpAddressException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidIpAddress(InvalidIpAddressException ex, HttpServletRequest request) {
+        String message = resolveMessage(ex);
+        logger.warn("Invalid IP address: {}", message);
+        return buildResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponseDto> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
