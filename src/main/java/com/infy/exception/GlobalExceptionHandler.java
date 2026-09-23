@@ -1,6 +1,5 @@
 package com.infy.exception;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -84,13 +83,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponseDto> buildResponse(HttpStatus status, String message, HttpServletRequest request) {
-        ErrorResponseDto body = ErrorResponseDto.builder()
-                .timestamp(LocalDateTime.now())
-                .status(status.value())
-                .error(status.getReasonPhrase())
-                .message(message)
-                .path(request.getRequestURI())
-                .build();
+        ErrorResponseDto body = ErrorResponseFactory.build(status, message, request.getRequestURI());
         return new ResponseEntity<>(body, status);
     }
 }

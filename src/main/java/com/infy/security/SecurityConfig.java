@@ -37,6 +37,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RestAccessDeniedHandler restAccessDeniedHandler;
 
     @Value("${app.cors.allowed-origin:http://localhost:3000}")
     private String allowedOrigin;
@@ -63,6 +65,13 @@ public class SecurityConfig {
                     .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .securityContext(context -> context.securityContextRepository(securityContextRepository))
+            // codex review finding #2: without this, requests Spring Security itself
+            // rejects (no session / insufficient authority) never reach
+            // GlobalExceptionHandler and fell back to Spring Security's default
+            // 403/plain-text response instead of the planned ErrorResponseDto JSON.
+            .exceptionHandling(exceptions -> exceptions
+                    .authenticationEntryPoint(restAuthenticationEntryPoint)
+                    .accessDeniedHandler(restAccessDeniedHandler))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/csrf", "/api/auth/login", "/api/auth/forgot-password/**").permitAll()
                     .anyRequest().authenticated());

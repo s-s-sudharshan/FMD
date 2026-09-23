@@ -1,8 +1,12 @@
 package com.infy.service;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -45,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     /** Minimum accepted length; SRS: 0-3 chars rejected, 4+ accepted (and classified weak/medium/strong). */
     private static final int MIN_PASSWORD_LENGTH = 4;
 
-    private static final String FORGOT_PASSWORD_SESSION_PREFIX = "FORGOT_PASSWORD_VERIFIED_";
+    private static final String FORGOT_PASSWORD_SESSION_PREFIX = "FORGOT_PASSWORD_VERIFIED_AT_";
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -53,6 +57,14 @@ public class AuthServiceImpl implements AuthService {
     private final SecurityContextRepository securityContextRepository;
     private final CurrentUserResolver currentUserResolver;
     private final ModelMapper modelMapper;
+
+    /**
+     * How long a verified secret answer stays usable before a reset must be
+     * re-verified (codex review finding #1 -- the original implementation had
+     * no expiry at all). Configurable; defaults to 5 minutes.
+     */
+    @Value("${app.forgot-password.verification-ttl-minutes:5}")
+    private long forgotPasswordVerificationTtlMinutes;
 
     @Override
     public LoginResponseDto login(LoginRequestDto request, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
@@ -132,21 +144,34 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidSecretAnswerException("Secret answer is incorrect");
         }
 
+        // Store the verification instant (not just a boolean) so resetPassword
+        // can enforce a short lifetime instead of trusting the flag for as
+        // long as the underlying HTTP session happens to stay alive.
         HttpSession session = httpRequest.getSession(true);
-        session.setAttribute(FORGOT_PASSWORD_SESSION_PREFIX + request.getUsername(), Boolean.TRUE);
-        logger.info("Forgot-password answer verified for username: {}", request.getUsername());
+        session.setAttribute(FORGOT_PASSWORD_SESSION_PREFIX + request.getUsername(), Instant.now());
+        logger.info("Forgot-password answer verified for username: {}, valid for {} minute(s)",
+                request.getUsername(), forgotPasswordVerificationTtlMinutes);
     }
 
     @Override
     public void resetPassword(ResetPasswordRequestDto request, HttpServletRequest httpRequest) {
         HttpSession session = httpRequest.getSession(false);
-        Object verifiedFlag = session != null
+        Object verifiedAtAttribute = session != null
                 ? session.getAttribute(FORGOT_PASSWORD_SESSION_PREFIX + request.getUsername())
                 : null;
 
-        if (!Boolean.TRUE.equals(verifiedFlag)) {
+        if (!(verifiedAtAttribute instanceof Instant verifiedAt)) {
             logger.warn("Reset password rejected - secret answer not verified for username: {}", request.getUsername());
             throw new InvalidSecretAnswerException("Secret answer must be verified before resetting the password");
+        }
+
+        Duration ttl = Duration.ofMinutes(forgotPasswordVerificationTtlMinutes);
+        if (Duration.between(verifiedAt, Instant.now()).compareTo(ttl) >= 0) {
+            // Expired: consume it so a stale flag can never be reused, then reject.
+            session.removeAttribute(FORGOT_PASSWORD_SESSION_PREFIX + request.getUsername());
+            logger.warn("Reset password rejected - secret-answer verification expired for username: {}", request.getUsername());
+            throw new InvalidSecretAnswerException(
+                    "Secret answer verification has expired; please verify the secret answer again");
         }
 
         User user = userRepository.findByUsername(request.getUsername())

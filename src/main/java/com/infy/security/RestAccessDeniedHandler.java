@@ -1,0 +1,44 @@
+package com.infy.security;
+
+import java.io.IOException;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infy.dto.ErrorResponseDto;
+import com.infy.exception.ErrorResponseFactory;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Handles requests Spring Security rejects because an authenticated user
+ * lacks the required role/authority (e.g. a future @PreAuthorize check) --
+ * the counterpart to {@link RestAuthenticationEntryPoint} for the
+ * "authenticated but forbidden" case (codex review finding #2). Without
+ * this, method-security denials fell back to Spring Security's default 403
+ * response instead of the planned {@link ErrorResponseDto} JSON shape.
+ */
+@Component
+@RequiredArgsConstructor
+public class RestAccessDeniedHandler implements AccessDeniedHandler {
+
+    private final ObjectMapper objectMapper;
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
+            throws IOException {
+        ErrorResponseDto body = ErrorResponseFactory.build(
+                HttpStatus.FORBIDDEN,
+                "You do not have permission to perform this action",
+                request.getRequestURI());
+
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setContentType("application/json");
+        response.getWriter().write(objectMapper.writeValueAsString(body));
+    }
+}
