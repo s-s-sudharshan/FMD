@@ -124,6 +124,20 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, message, request);
     }
 
+    @ExceptionHandler(AlarmNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleAlarmNotFound(AlarmNotFoundException ex, HttpServletRequest request) {
+        String message = resolveMessage(ex);
+        logger.warn("Alarm not found: {}", message);
+        return buildResponse(HttpStatus.NOT_FOUND, message, request);
+    }
+
+    @ExceptionHandler(InvalidAlarmStateTransitionException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidAlarmStateTransition(InvalidAlarmStateTransitionException ex, HttpServletRequest request) {
+        String message = resolveMessage(ex);
+        logger.warn("Invalid alarm state transition: {}", message);
+        return buildResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+    
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponseDto> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
         String message = environment.getProperty("General.ACCESS_DENIED_MESSAGE",

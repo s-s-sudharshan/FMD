@@ -185,3 +185,14 @@ OncePerRequestFilter all come from dependencies already present.
 - [x] FE US14 / BE US10 — Deactivate device: dto/DeactivateDeviceRequestDto, exception/DeviceNotFoundException, deactivateDevice, PUT /api/devices/deactivate
 - [x] GlobalExceptionHandler (3 handlers), ValidationMessages (device.*), application.properties (Service.*/API.*), TableScript.sql (devices)
 No SecurityConfig / pom.xml change. Not built/run here (no Maven Central egress) — run ./mvnw spring-boot:run to verify.
+
+## Phase 4 — Manager: Fault/Alarm Handling
+- [x] FE US15 — Home Page (Manager): frontend-only, skipped.
+- [x] Shared groundwork: enums/{Severity,TrapType,AlarmStatus}, entity/Alarm, repository/AlarmRepository
+- [x] FE US16 / BE US12 — Fault list + notes: dto/{AlarmResponseDto,AlarmSearchRequestDto,AlarmNoteUpdateRequestDto}, AlarmService(Impl).getAllAlarms/updateNotes, GET /api/alarms, PUT /api/alarms/{id}/notes
+- [x] FE US17 / BE US13 — Acknowledge: dto/BulkAlarmActionRequestDto, exception/{AlarmNotFoundException,InvalidAlarmStateTransitionException}, acknowledgeAlarm(+Bulk)
+- [x] FE US18 / BE US14 — Clear: clearAlarm(+Bulk)
+- [x] FE US19 / BE US15 — Terminate: terminateAlarm (single only)
+- [x] GlobalExceptionHandler (2 handlers), ValidationMessages (alarm.*), application.properties, TableScript.sql (alarms + seed)
+No SecurityConfig / pom.xml change. Not built/run here (no Maven Central egress).
+

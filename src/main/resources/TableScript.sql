@@ -53,3 +53,34 @@ INSERT INTO devices (serial_number, ip_address, device_type, device_state) VALUE
     ('SN-1002', '192.168.1.11', 'SWITCH', 'ACTIVATED'),
     ('SN-1003', '192.168.1.12', 'HUB',    'ACTIVATED'),
     ('SN-1004', '192.168.1.13', 'ROUTER', 'DEACTIVATED');
+    
+CREATE TABLE IF NOT EXISTS alarms (
+    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    device_id     BIGINT        NOT NULL,
+    device_ip     VARCHAR(255)  NOT NULL,
+    serial_number VARCHAR(255)  NOT NULL,
+    device_type   VARCHAR(50)   NOT NULL,
+    severity      VARCHAR(50)   NOT NULL,
+    trap          VARCHAR(100)  NOT NULL,
+    notes         VARCHAR(1000),
+    occurrence    INT           NOT NULL DEFAULT 1,
+    status        VARCHAR(50)   NOT NULL DEFAULT 'UNACKNOWLEDGED',
+    created_at    DATETIME(6)   NOT NULL,
+    updated_at    DATETIME(6)   NOT NULL,
+    CONSTRAINT fk_alarm_device FOREIGN KEY (device_id) REFERENCES devices(id)
+);
+ 
+INSERT INTO alarms (device_id, device_ip, serial_number, device_type, severity, trap, notes, occurrence, status, created_at, updated_at)
+SELECT id, ip_address, serial_number, device_type, s.severity, s.trap, s.notes, s.occ, s.status, NOW(6), NOW(6)
+FROM devices d
+JOIN (
+    SELECT 'SN-1001' sn, 'CRITICAL' severity, 'CBGP_BACKWARD_TRANSITION' trap, 'BGP peer dropped' notes, 3 occ, 'UNACKNOWLEDGED' status
+    UNION ALL SELECT 'SN-1001', 'MAJOR',   'CBGP_FSM_STATE_CHANGE',          NULL, 1, 'UNACKNOWLEDGED'
+    UNION ALL SELECT 'SN-1001', 'WARNING', 'CBGP_PREFIX_THRESHOLD_EXCEEDED', NULL, 2, 'ACKNOWLEDGED'
+    UNION ALL SELECT 'SN-1002', 'SEVERE',  'CBGP_BACKWARD_TRANSITION',       NULL, 1, 'UNACKNOWLEDGED'
+    UNION ALL SELECT 'SN-1002', 'CLEAR',   'CBGP_PREFIX_THRESHOLD_CLEAR',    NULL, 1, 'ACKNOWLEDGED'
+    UNION ALL SELECT 'SN-1002', 'MAJOR',   'CBGP_FSM_STATE_CHANGE',          NULL, 1, 'CLEARED'
+    UNION ALL SELECT 'SN-1003', 'WARNING', 'CBGP_PREFIX_THRESHOLD_EXCEEDED', NULL, 4, 'UNACKNOWLEDGED'
+    UNION ALL SELECT 'SN-1003', 'MAJOR',   'CBGP_FSM_STATE_CHANGE',          NULL, 1, 'TERMINATED'
+    UNION ALL SELECT 'SN-1004', 'CRITICAL','CBGP_BACKWARD_TRANSITION',       'device deactivated - hidden', 1, 'UNACKNOWLEDGED'
+) s ON s.sn = d.serial_number;

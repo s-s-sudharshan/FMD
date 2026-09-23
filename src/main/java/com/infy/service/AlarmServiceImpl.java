@@ -1,0 +1,187 @@
+package com.infy.service;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.infy.dto.AlarmNoteUpdateRequestDto;
+import com.infy.dto.AlarmResponseDto;
+import com.infy.dto.AlarmSearchRequestDto;
+import com.infy.dto.BulkAlarmActionRequestDto;
+import com.infy.entity.Alarm;
+import com.infy.enums.AlarmStatus;
+import com.infy.enums.DeviceState;
+import com.infy.exception.AlarmNotFoundException;
+import com.infy.exception.InvalidAlarmStateTransitionException;
+import com.infy.repository.AlarmRepository;
+
+import jakarta.persistence.criteria.Predicate;
+
+/**
+ * BE US12-US15 (Phase 4 Manager Fault Handling).
+ *
+ * Entity->DTO mapping is done by hand here (not ModelMapper): Alarm carries
+ * both denormalized fields (deviceIp, serialNumber, deviceType) and a
+ * {@code device} relation with same-named properties, which makes
+ * ModelMapper's implicit matching ambiguous and fails at startup.
+ *
+ * Bulk operations are all-or-nothing: every id is validated before any
+ * status is changed, inside one transaction.
+ */
+@Service
+public class AlarmServiceImpl implements AlarmService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AlarmServiceImpl.class);
+
+    private static final int PAGE_SIZE = 10;
+
+    private static final Set<AlarmStatus> ACK_FROM = EnumSet.of(AlarmStatus.UNACKNOWLEDGED);
+    private static final Set<AlarmStatus> CLEAR_FROM = EnumSet.of(AlarmStatus.ACKNOWLEDGED);
+    private static final Set<AlarmStatus> TERMINATE_FROM = EnumSet.of(AlarmStatus.ACKNOWLEDGED, AlarmStatus.CLEARED);
+
+    @Autowired
+    private AlarmRepository alarmRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AlarmResponseDto> getAllAlarms(AlarmSearchRequestDto filter, int page) {
+        AlarmSearchRequestDto f = filter != null ? filter : new AlarmSearchRequestDto();
+        Page<Alarm> result = alarmRepository.findAll(buildSpecification(f),
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createdAt", "id")));
+        logger.info("Fetched alarm list page {} ({} of {} total matching alarms)",
+                page, result.getNumberOfElements(), result.getTotalElements());
+        return result.getContent().stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void acknowledgeAlarm(Long id) {
+        transition(id, ACK_FROM, AlarmStatus.ACKNOWLEDGED, "Service.ALARM_NOT_UNACKNOWLEDGED");
+    }
+
+    @Override
+    @Transactional
+    public void acknowledgeAlarmsBulk(BulkAlarmActionRequestDto request) {
+        transitionBulk(request.getAlarmIds(), ACK_FROM, AlarmStatus.ACKNOWLEDGED, "Service.ALARM_NOT_UNACKNOWLEDGED");
+    }
+
+    @Override
+    @Transactional
+    public void clearAlarm(Long id) {
+        transition(id, CLEAR_FROM, AlarmStatus.CLEARED, "Service.ALARM_NOT_ACKNOWLEDGED");
+    }
+
+    @Override
+    @Transactional
+    public void clearAlarmsBulk(BulkAlarmActionRequestDto request) {
+        transitionBulk(request.getAlarmIds(), CLEAR_FROM, AlarmStatus.CLEARED, "Service.ALARM_NOT_ACKNOWLEDGED");
+    }
+
+    @Override
+    @Transactional
+    public void terminateAlarm(Long id) {
+        transition(id, TERMINATE_FROM, AlarmStatus.TERMINATED, "Service.ALARM_CANNOT_TERMINATE");
+    }
+
+    @Override
+    @Transactional
+    public void updateNotes(Long id, AlarmNoteUpdateRequestDto request) {
+        Alarm alarm = findAlarm(id);
+        alarm.setNotes(request.getNotes());
+        alarmRepository.save(alarm);
+        logger.info("Notes updated for alarm {}", id);
+    }
+
+    @Override
+    public void ingestAlarmsFromXml(String xml) {
+        throw new UnsupportedOperationException("Simulator (BE US16) is deferred to Phase 7");
+    }
+
+    /**
+     * Default view = alarms of ACTIVATED devices, excluding TERMINATED alarms
+     * (they drop out of the fault-handling table, per plan.md Section 9).
+     * Passing status=TERMINATED explicitly still returns them.
+     */
+    private Specification<Alarm> buildSpecification(AlarmSearchRequestDto f) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.equal(root.get("device").get("deviceState"), DeviceState.ACTIVATED));
+            if (StringUtils.hasText(f.getDeviceIp())) {
+                predicates.add(cb.like(root.get("deviceIp"), "%" + f.getDeviceIp().trim() + "%"));
+            }
+            if (f.getSeverity() != null) {
+                predicates.add(cb.equal(root.get("severity"), f.getSeverity()));
+            }
+            if (f.getStatus() != null) {
+                predicates.add(cb.equal(root.get("status"), f.getStatus()));
+            } else {
+                predicates.add(cb.notEqual(root.get("status"), AlarmStatus.TERMINATED));
+            }
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    private void transition(Long id, Set<AlarmStatus> allowedFrom, AlarmStatus target, String errorKey) {
+        Alarm alarm = findAlarm(id);
+        if (!allowedFrom.contains(alarm.getStatus())) {
+            logger.warn("Alarm {} cannot move {} -> {}", id, alarm.getStatus(), target);
+            throw new InvalidAlarmStateTransitionException(errorKey);
+        }
+        alarm.setStatus(target);
+        alarmRepository.save(alarm);
+        logger.info("Alarm {} moved to {}", id, target);
+    }
+
+    private void transitionBulk(List<Long> ids, Set<AlarmStatus> allowedFrom, AlarmStatus target, String errorKey) {
+        Set<Long> uniqueIds = new LinkedHashSet<>(ids);
+        List<Alarm> alarms = alarmRepository.findAllById(uniqueIds);
+        if (alarms.size() != uniqueIds.size()) {
+            logger.warn("Bulk {} rejected - one or more alarm ids not found: {}", target, uniqueIds);
+            throw new AlarmNotFoundException("Service.ALARM_NOT_FOUND");
+        }
+        List<Long> invalid = alarms.stream()
+                .filter(a -> !allowedFrom.contains(a.getStatus()))
+                .map(Alarm::getId)
+                .collect(Collectors.toList());
+        if (!invalid.isEmpty()) {
+            logger.warn("Bulk {} rejected - alarms in an invalid state: {}", target, invalid);
+            throw new InvalidAlarmStateTransitionException(errorKey);
+        }
+        alarms.forEach(a -> a.setStatus(target));
+        alarmRepository.saveAll(alarms);
+        logger.info("{} alarm(s) moved to {}: {}", alarms.size(), target, uniqueIds);
+    }
+
+    private Alarm findAlarm(Long id) {
+        return alarmRepository.findById(id)
+                .orElseThrow(() -> new AlarmNotFoundException("Service.ALARM_NOT_FOUND"));
+    }
+
+    private AlarmResponseDto toDto(Alarm a) {
+        return AlarmResponseDto.builder()
+                .id(a.getId())
+                .deviceIp(a.getDeviceIp())
+                .serialNumber(a.getSerialNumber())
+                .deviceType(a.getDeviceType())
+                .severity(a.getSeverity())
+                .trap(a.getTrap())
+                .notes(a.getNotes())
+                .occurrence(a.getOccurrence())
+                .status(a.getStatus())
+                .build();
+    }
+}
