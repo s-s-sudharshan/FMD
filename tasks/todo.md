@@ -196,3 +196,8 @@ No SecurityConfig / pom.xml change. Not built/run here (no Maven Central egress)
 - [x] GlobalExceptionHandler (2 handlers), ValidationMessages (alarm.*), application.properties, TableScript.sql (alarms + seed)
 No SecurityConfig / pom.xml change. Not built/run here (no Maven Central egress).
 
+## Phase 5 — Reporting
+- [x] FE US07 / BE US06 — Report: enums/ReportType, dto/{ReportRequestDto,ReportSliceDto,ReportResponseDto}, ReportService(Impl).generateReport, api/ReportAPI GET /api/reports?type=SEVERITY|STATUS
+- [x] AlarmRepository (2 grouped-count queries), ValidationMessages (report.*), application.properties (API.REPORT_GENERATED)
+Scope: counts all alarms (incl. TERMINATED and deactivated devices); zero-count slices always returned.
+No SecurityConfig / GlobalExceptionHandler / pom.xml change. Not built/run here (no Maven Central egress).
