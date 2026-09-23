@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,17 +19,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 
 /**
- * Central exception -> HTTP status mapping (plan.md Section 7). Only the
- * exceptions relevant to Phase 1 (Auth) are handled here; later phases add
- * their own @ExceptionHandler methods to this same class rather than
- * duplicating the response-building logic.
+ * Central exception -> HTTP status mapping (plan.md Section 7), extended
+ * with the two Phase 2 exceptions and the AccessDeniedException fix below.
  *
- * Custom exceptions now carry a message-property key (e.g. "Service.USER_NOT_FOUND")
- * rather than literal text, so {@link #resolveMessage(RuntimeException)} looks that
- * key up in application.properties via the injected Environment, falling back to the
- * exception's own message if no matching property exists (covers exceptions -- such
- * as UnauthorizedActionException from CurrentUserResolver -- that were left carrying
- * literal text since they're outside this refactor's scope).
+ * P3 fix (phase2_review_actions.md): @PreAuthorize throws AccessDeniedException
+ * during controller-method invocation, which this @RestControllerAdvice
+ * intercepts before it can reach SecurityConfig's registered
+ * RestAccessDeniedHandler (that handler only sees denials the filter chain
+ * itself raises, e.g. from authorizeHttpRequests rules -- not from method
+ * security). Without an explicit handler here, it fell through to
+ * @ExceptionHandler(Exception.class) and returned 500 instead of 403. Reuses
+ * the same General.ACCESS_DENIED_MESSAGE key RestAccessDeniedHandler uses, so
+ * the message is identical whichever path catches the denial.
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -87,6 +89,28 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.FORBIDDEN, message, request);
     }
 
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<ErrorResponseDto> handleDuplicateUsername(DuplicateUsernameException ex, HttpServletRequest request) {
+        String message = resolveMessage(ex);
+        logger.warn("Duplicate username on add user: {}", message);
+        return buildResponse(HttpStatus.CONFLICT, message, request);
+    }
+
+    @ExceptionHandler(InvalidRoleChangeException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidRoleChange(InvalidRoleChangeException ex, HttpServletRequest request) {
+        String message = resolveMessage(ex);
+        logger.warn("Invalid role change: {}", message);
+        return buildResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
+        String message = environment.getProperty("General.ACCESS_DENIED_MESSAGE",
+                "You do not have permission to perform this action");
+        logger.warn("Access denied on {}: {}", request.getRequestURI(), ex.getMessage());
+        return buildResponse(HttpStatus.FORBIDDEN, message, request);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDto> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         String message = ex.getBindingResult().getFieldErrors().stream()
@@ -112,14 +136,6 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, message, request);
     }
 
-    /**
-     * Resolves a custom exception's message as a property key against
-     * application.properties (e.g. "Service.USER_NOT_FOUND" -> "User not found.").
-     * Falls back to the exception's own message when no property matches --
-     * this also correctly handles the already-formatted WeakPasswordException
-     * message (built with MessageFormat in AuthServiceImpl), since that text
-     * simply won't match any property key and is returned as-is.
-     */
     private String resolveMessage(RuntimeException ex) {
         return environment.getProperty(ex.getMessage(), ex.getMessage());
     }

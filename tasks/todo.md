@@ -124,3 +124,53 @@ compile.
 Project Structure lists, plus a one-off seed INSERT for 4 test users (needed for Postman testing
 since there's no Add User endpoint until Phase 2). `ddl-auto=update` still creates the table
 automatically; the script exists for manual seeding and as the durable schema reference.
+
+## Phase 2 — Admin: User Management
+
+**Plan gap found:** Section 7's exception list has no exception for "Change
+Role called with newRole == current role" even though Section 5 requires the
+check. Resolved by adding `InvalidRoleChangeException` (400), following the
+same one-exception-per-failure pattern as every other entry in that section.
+
+- [x] FE US02 — Home Page (Admin): frontend-only, no backend task, skipped.
+- [x] FE US03 / BE US02 — Display all users
+  - dto/UserResponseDto.java
+  - service/UserService.java, service/UserServiceImpl.java (getAllUsers)
+  - api/UserAPI.java — GET /api/users?page= (ADMIN)
+- [x] FE US04 / BE US03 — Add user
+  - dto/UserRequestDto.java
+  - exception/DuplicateUsernameException.java
+  - service/UserServiceImpl.java (addUser)
+  - api/UserAPI.java — POST /api/users (ADMIN)
+- [x] FE US05 / BE US04 — Change user role
+  - dto/ChangeRoleRequestDto.java
+  - exception/InvalidRoleChangeException.java (new — see plan gap above)
+  - service/UserServiceImpl.java (changeUserRole)
+  - api/UserAPI.java — PUT /api/users/role (ADMIN)
+- [x] FE US06 / BE US05 — Deactivate user
+  - dto/DeactivateUserRequestDto.java
+  - service/UserServiceImpl.java (deactivateUser)
+  - api/UserAPI.java — PUT /api/users/deactivate (ADMIN)
+- [x] exception/GlobalExceptionHandler.java — 2 new handlers (409, 400)
+- [x] ValidationMessages.properties — user.* keys
+- [x] application.properties — Service.DUPLICATE_USERNAME, Service.SAME_ROLE, API.* messages
+
+No SecurityConfig change needed: `.anyRequest().authenticated()` plus
+`@PreAuthorize("hasRole('ADMIN')")` (method security already enabled in
+Phase 1) is sufficient. pom.xml untouched — no new dependency required.
+
+**Not yet done:** unit/integration tests for User Management (Phase 6, per plan.md).
+
+## Phase 2 — Post-review fixes (phase2_review_actions.md)
+
+- [x] P3 — GlobalExceptionHandler.java: added @ExceptionHandler(AccessDeniedException.class)
+      -> 403. Root cause: @RestControllerAdvice intercepts the exception before it can
+      reach SecurityConfig's registered RestAccessDeniedHandler.
+- [x] P2 — UserAPI.java: @Validated on the class + @Min(0) on getAllUsers' page param.
+      ValidationMessages.properties: added user.page.negative.
+- [x] P1 — security/SessionUserStatusFilter.java (new): re-validates role/state from
+      the DB on every authenticated request. SecurityConfig.java: registered it via
+      addFilterAfter(sessionUserStatusFilter, SecurityContextHolderFilter.class).
+
+No pom.xml change for any of the three — AccessDeniedException, @Validated, and
+OncePerRequestFilter all come from dependencies already present.

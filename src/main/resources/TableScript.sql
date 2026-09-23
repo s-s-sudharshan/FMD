@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     secret_answer   VARCHAR(255) NOT NULL
 );
 
--- Seed users for Postman testing (Phase 1 has no Add User endpoint yet).
+-- Seed users for Postman testing.
 -- Password for every row below is: Passw0rd
 -- Hash is a real BCrypt digest (strength 10, $2a$ prefix) matching Spring's
 -- default BCryptPasswordEncoder(), so passwordEncoder.matches("Passw0rd", ...) succeeds.
@@ -27,4 +27,15 @@ INSERT INTO users (username, password, role, user_state, secret_question, secret
     ('admin1',   '$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'ADMIN',    'ACTIVATED',   'FIRST_PET', 'fluffy'),
     ('operator1','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'ACTIVATED',   'FIRST_PET', 'fluffy'),
     ('manager1', '$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'MANAGER',  'ACTIVATED',   'FIRST_PET', 'fluffy'),
-    ('inactive1','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'DEACTIVATED', 'FIRST_PET', 'fluffy');
+    ('inactive1','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'DEACTIVATED', 'FIRST_PET', 'fluffy'),
+    -- Extra seed rows added for Phase 2, purely so GET /api/users?page=0 vs page=1
+    -- has something to show (10/page). No functional difference from the four above.
+    ('operator2','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'ACTIVATED',   'BIRTH_CITY', 'fluffy'),
+    ('operator3','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'ACTIVATED',   'BIRTH_CITY', 'fluffy'),
+    ('manager2', '$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'MANAGER',  'ACTIVATED',   'FAVOURITE_TEACHER', 'fluffy'),
+    ('admin2',   '$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'ADMIN',    'ACTIVATED',   'FAVOURITE_BOOK', 'fluffy'),
+    ('operator4','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'ACTIVATED',   'MOTHERS_MAIDEN_NAME', 'fluffy'),
+    ('operator5','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'ACTIVATED',   'MOTHERS_MAIDEN_NAME', 'fluffy'),
+    ('manager3', '$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'MANAGER',  'ACTIVATED',   'FIRST_PET', 'fluffy'),
+    ('operator6','$2a$10$Si.kcZWumAw0qsqRHFZX7.mw6Fo.fKM3DmapnYRKTHO4gWbIfKd1O', 'OPERATOR', 'ACTIVATED',   'BIRTH_CITY', 'fluffy');
+    

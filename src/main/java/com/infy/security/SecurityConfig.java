@@ -28,6 +28,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * plan.md "Assumptions / Decisions Locked In". CSRF stays enabled with a
  * JS-readable XSRF-TOKEN cookie so the separate-origin React SPA can echo it
  * back as X-XSRF-TOKEN on state-changing requests (plan.md Section 8/9).
+ *
+ * Note: a role change or deactivation only takes effect for a user's *next*
+ * login -- an already-open session keeps its authorities/enabled-state until
+ * logout or session expiry. Out of scope for this project (see
+ * tasks/lessons.md); not fixed here.
  */
 @Configuration
 @EnableWebSecurity
