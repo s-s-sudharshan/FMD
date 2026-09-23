@@ -3,6 +3,7 @@ package com.infy.security;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -29,12 +30,17 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private Environment environment;
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
             throws IOException {
+        String message = environment.getProperty("General.ACCESS_DENIED_MESSAGE",
+                "You do not have permission to perform this action");
         ErrorResponseDto body = ErrorResponseFactory.build(
                 HttpStatus.FORBIDDEN,
-                "You do not have permission to perform this action",
+                message,
                 request.getRequestURI());
 
         response.setStatus(HttpStatus.FORBIDDEN.value());

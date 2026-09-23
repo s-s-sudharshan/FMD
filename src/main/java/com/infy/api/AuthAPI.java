@@ -3,6 +3,7 @@ package com.infy.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,9 @@ public class AuthAPI {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private Environment environment;
+
     /**
      * plan.md Section 8/9's "frontend fires a lightweight GET on app load to
      * receive the XSRF-TOKEN cookie" contract. Injecting CsrfToken as a
@@ -52,7 +56,7 @@ public class AuthAPI {
         csrfToken.getToken();
         return ResponseEntity.ok(ApiResponseDto.<Void>builder()
                 .success(true)
-                .message("CSRF cookie issued")
+                .message(environment.getProperty("API.CSRF_COOKIE_ISSUED", "CSRF cookie issued"))
                 .build());
     }
 
@@ -64,7 +68,7 @@ public class AuthAPI {
         LoginResponseDto data = authService.login(request, httpRequest, httpResponse);
         return ResponseEntity.ok(ApiResponseDto.<LoginResponseDto>builder()
                 .success(true)
-                .message("Login successful")
+                .message(environment.getProperty("API.LOGIN_SUCCESS", "Login successful"))
                 .data(data)
                 .build());
     }
@@ -75,7 +79,7 @@ public class AuthAPI {
         authService.logout(httpRequest, httpResponse);
         return ResponseEntity.ok(ApiResponseDto.<Void>builder()
                 .success(true)
-                .message("Logout successful")
+                .message(environment.getProperty("API.LOGOUT_SUCCESS", "Logout successful"))
                 .build());
     }
 
@@ -85,7 +89,7 @@ public class AuthAPI {
         SecretQuestion question = authService.getSecretQuestion(request.getUsername());
         return ResponseEntity.ok(ApiResponseDto.<SecretQuestion>builder()
                 .success(true)
-                .message("Secret question retrieved")
+                .message(environment.getProperty("API.SECRET_QUESTION_RETRIEVED", "Secret question retrieved"))
                 .data(question)
                 .build());
     }
@@ -97,7 +101,7 @@ public class AuthAPI {
         authService.verifySecretAnswer(request, httpRequest);
         return ResponseEntity.ok(ApiResponseDto.<Void>builder()
                 .success(true)
-                .message("Secret answer verified")
+                .message(environment.getProperty("API.SECRET_ANSWER_VERIFIED", "Secret answer verified"))
                 .build());
     }
 
@@ -108,7 +112,7 @@ public class AuthAPI {
         authService.resetPassword(request, httpRequest);
         return ResponseEntity.ok(ApiResponseDto.<Void>builder()
                 .success(true)
-                .message("Password reset successful")
+                .message(environment.getProperty("API.PASSWORD_RESET_SUCCESS", "Password reset successful"))
                 .build());
     }
 }

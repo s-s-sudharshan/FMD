@@ -3,6 +3,7 @@ package com.infy.security;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -30,12 +31,17 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private Environment environment;
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException {
+        String message = environment.getProperty("General.UNAUTHORIZED_MESSAGE",
+                "Authentication is required to access this resource");
         ErrorResponseDto body = ErrorResponseFactory.build(
                 HttpStatus.UNAUTHORIZED,
-                "Authentication is required to access this resource",
+                message,
                 request.getRequestURI());
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

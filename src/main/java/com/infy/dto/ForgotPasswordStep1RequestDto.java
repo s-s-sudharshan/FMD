@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ForgotPasswordStep1RequestDto {
 
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = "{auth.username.absent}")
     private String username;
 }

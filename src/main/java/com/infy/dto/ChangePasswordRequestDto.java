@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChangePasswordRequestDto {
 
-    @NotBlank(message = "Current password is required")
+    @NotBlank(message = "{auth.currentPassword.absent}")
     private String currentPassword;
 
-    @NotBlank(message = "New password is required")
+    @NotBlank(message = "{auth.newPassword.absent}")
     private String newPassword;
 
-    @NotBlank(message = "Confirm password is required")
+    @NotBlank(message = "{auth.confirmPassword.absent}")
     private String confirmPassword;
 }

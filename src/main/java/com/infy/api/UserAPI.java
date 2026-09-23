@@ -3,6 +3,7 @@ package com.infy.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,13 +36,16 @@ public class UserAPI {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private Environment environment;
+
     @PutMapping("/change-password")
     public ResponseEntity<ApiResponseDto<Void>> changePassword(@Valid @RequestBody ChangePasswordRequestDto request) {
         logger.info("Received change-password request");
         authService.changePassword(request);
         return ResponseEntity.ok(ApiResponseDto.<Void>builder()
                 .success(true)
-                .message("Password changed successfully")
+                .message(environment.getProperty("API.PASSWORD_CHANGE_SUCCESS", "Password changed successfully"))
                 .build());
     }
 }

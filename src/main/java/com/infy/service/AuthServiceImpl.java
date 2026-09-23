@@ -1,5 +1,6 @@
 package com.infy.service;
 
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -68,12 +70,15 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private Environment environment;
+
     /**
      * How long a verified secret answer stays usable before a reset must be
      * re-verified (codex review finding #1 -- the original implementation had
      * no expiry at all). Configurable; defaults to 5 minutes.
      */
-    @Value("${app.forgot-password.verification-ttl-minutes:1}")
+    @Value("${app.forgot-password.verification-ttl-minutes:5}")
     private long forgotPasswordVerificationTtlMinutes;
 
     @Override
@@ -86,10 +91,10 @@ public class AuthServiceImpl implements AuthService {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         } catch (DisabledException ex) {
             logger.warn("Login rejected - user is deactivated: {}", request.getUsername());
-            throw new UserDeactivatedException("User is Deactivated");
+            throw new UserDeactivatedException("Service.USER_DEACTIVATED");
         } catch (BadCredentialsException ex) {
             logger.warn("Login rejected - bad credentials for username: {}", request.getUsername());
-            throw new InvalidCredentialsException("Wrong username or password");
+            throw new InvalidCredentialsException("Service.INVALID_CREDENTIALS");
         }
 
         // Persist the authenticated context into the HTTP session so the
@@ -100,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
         securityContextRepository.saveContext(context, httpRequest, httpResponse);
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("No user found with username: " + request.getUsername()));
+                .orElseThrow(() -> new UserNotFoundException("Service.USER_NOT_FOUND"));
 
         logger.info("Login succeeded for username: {} with role: {}", user.getUsername(), user.getRole());
 
@@ -122,11 +127,11 @@ public class AuthServiceImpl implements AuthService {
     public void changePassword(ChangePasswordRequestDto request) {
         String username = currentUserResolver.getCurrentUsername();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("No user found with username: " + username));
+                .orElseThrow(() -> new UserNotFoundException("Service.USER_NOT_FOUND"));
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             logger.warn("Change password rejected - current password incorrect for username: {}", username);
-            throw new InvalidCredentialsException("Current password is incorrect");
+            throw new InvalidCredentialsException("Service.CURRENT_PASSWORD_INCORRECT");
         }
 
         validateNewPassword(request.getNewPassword(), request.getConfirmPassword());
@@ -139,7 +144,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public SecretQuestion getSecretQuestion(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("No user found with username: " + username));
+                .orElseThrow(() -> new UserNotFoundException("Service.USER_NOT_FOUND"));
         logger.info("Secret question requested for username: {}", username);
         return user.getSecretQuestion();
     }
@@ -147,11 +152,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void verifySecretAnswer(ForgotPasswordStep2RequestDto request, HttpServletRequest httpRequest) {
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("No user found with username: " + request.getUsername()));
+                .orElseThrow(() -> new UserNotFoundException("Service.USER_NOT_FOUND"));
 
         if (!user.getSecretAnswer().equalsIgnoreCase(request.getAnswer().trim())) {
             logger.warn("Forgot-password answer verification failed for username: {}", request.getUsername());
-            throw new InvalidSecretAnswerException("Secret answer is incorrect");
+            throw new InvalidSecretAnswerException("Service.INVALID_SECRET_ANSWER");
         }
 
         // Store the verification instant (not just a boolean) so resetPassword
@@ -172,7 +177,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (!(verifiedAtAttribute instanceof Instant verifiedAt)) {
             logger.warn("Reset password rejected - secret answer not verified for username: {}", request.getUsername());
-            throw new InvalidSecretAnswerException("Secret answer must be verified before resetting the password");
+            throw new InvalidSecretAnswerException("Service.FORGOT_PASSWORD_NOT_VERIFIED");
         }
 
         Duration ttl = Duration.ofMinutes(forgotPasswordVerificationTtlMinutes);
@@ -180,12 +185,11 @@ public class AuthServiceImpl implements AuthService {
             // Expired: consume it so a stale flag can never be reused, then reject.
             session.removeAttribute(FORGOT_PASSWORD_SESSION_PREFIX + request.getUsername());
             logger.warn("Reset password rejected - secret-answer verification expired for username: {}", request.getUsername());
-            throw new InvalidSecretAnswerException(
-                    "Secret answer verification has expired; please verify the secret answer again");
+            throw new InvalidSecretAnswerException("Service.FORGOT_PASSWORD_VERIFICATION_EXPIRED");
         }
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("No user found with username: " + request.getUsername()));
+                .orElseThrow(() -> new UserNotFoundException("Service.USER_NOT_FOUND"));
 
         validateNewPassword(request.getNewPassword(), request.getConfirmPassword());
 
@@ -197,10 +201,12 @@ public class AuthServiceImpl implements AuthService {
 
     private void validateNewPassword(String newPassword, String confirmPassword) {
         if (newPassword.length() < MIN_PASSWORD_LENGTH) {
-            throw new WeakPasswordException("Password must be at least " + MIN_PASSWORD_LENGTH + " characters long");
+            String template = environment.getProperty("Service.WEAK_PASSWORD",
+                    "Password must be at least {0} characters long.");
+            throw new WeakPasswordException(MessageFormat.format(template, MIN_PASSWORD_LENGTH));
         }
         if (!newPassword.equals(confirmPassword)) {
-            throw new PasswordMismatchException("New password and confirm password do not match");
+            throw new PasswordMismatchException("Service.PASSWORD_MISMATCH");
         }
     }
 

@@ -144,3 +144,142 @@
 2026-09-23 08:19:52 INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 0 ms
 2026-09-23 08:19:52 INFO  com.infy.api.AuthAPI - Received forgot-password question request for username: operator1
 2026-09-23 08:19:52 INFO  com.infy.service.AuthServiceImpl - Secret question requested for username: operator1
+2026-09-23 08:22:02 INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-09-23 08:22:02 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 29556 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-23 08:22:02 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-23 08:22:02 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-23 08:22:02 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-23 08:22:02 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-23 08:22:03 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-23 08:22:03 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 30 ms. Found 1 JPA repository interface.
+2026-09-23 08:22:03 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-09-23 08:22:03 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:22:03 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-23 08:22:03 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-23 08:22:03 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-23 08:22:03 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1350 ms
+2026-09-23 08:22:04 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-23 08:22:04 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-09-23 08:22:04 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-23 08:22:04 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-23 08:22:04 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-23 08:22:04 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@455bc098
+2026-09-23 08:22:04 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-23 08:22:05 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-23 08:22:05 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 08:22:05 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-23 08:22:05 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2ef6f401, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3dd36ce3, org.springframework.security.web.context.SecurityContextHolderFilter@3a393a38, org.springframework.security.web.header.HeaderWriterFilter@2fe581a4, org.springframework.web.filter.CorsFilter@1fda3b30, org.springframework.security.web.csrf.CsrfFilter@62aba181, org.springframework.security.web.authentication.logout.LogoutFilter@48659a0a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@47f7f888, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@b85d850, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@41e91372, org.springframework.security.web.session.SessionManagementFilter@3ea70a56, org.springframework.security.web.access.ExceptionTranslationFilter@98e4f0a, org.springframework.security.web.access.intercept.AuthorizationFilter@43aa1397]
+2026-09-23 08:22:06 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-23 08:22:06 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:22:06 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-09-23 08:22:06 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 3.889 seconds (process running for 4.431)
+2026-09-23 08:23:32 INFO  org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-09-23 08:23:32 INFO  org.apache.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:23:32 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 08:23:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-09-23 08:23:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-09-23 08:23:32 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 29556 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-23 08:23:32 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-23 08:23:32 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-23 08:23:32 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-23 08:23:32 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 1 JPA repository interface.
+2026-09-23 08:23:32 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-09-23 08:23:32 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:23:32 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-23 08:23:32 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-23 08:23:32 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-23 08:23:32 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 234 ms
+2026-09-23 08:23:32 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-23 08:23:32 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-23 08:23:32 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-23 08:23:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-09-23 08:23:32 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3ee4b3a0
+2026-09-23 08:23:32 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-09-23 08:23:32 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-23 08:23:32 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 08:23:32 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-23 08:23:32 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1d52ba0d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2bdc2173, org.springframework.security.web.context.SecurityContextHolderFilter@4ad898e8, org.springframework.security.web.header.HeaderWriterFilter@373241ed, org.springframework.web.filter.CorsFilter@28af7807, org.springframework.security.web.csrf.CsrfFilter@72381172, org.springframework.security.web.authentication.logout.LogoutFilter@4e3f10e4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@50f21b93, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@75ea1549, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@26d25e3f, org.springframework.security.web.session.SessionManagementFilter@7859b510, org.springframework.security.web.access.ExceptionTranslationFilter@3de4fa8a, org.springframework.security.web.access.intercept.AuthorizationFilter@2bb4a8ed]
+2026-09-23 08:23:32 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-23 08:23:32 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:23:32 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-09-23 08:23:32 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 0.498 seconds (process running for 91.181)
+2026-09-23 08:23:32 INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-09-23 08:23:40 INFO  org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-09-23 08:23:40 INFO  org.apache.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:23:40 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 08:23:40 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2026-09-23 08:23:40 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2026-09-23 08:23:40 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 29556 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-23 08:23:40 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-23 08:23:40 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-23 08:23:40 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-23 08:23:40 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 1 JPA repository interface.
+2026-09-23 08:23:40 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-09-23 08:23:40 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:23:40 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-23 08:23:40 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-23 08:23:40 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-23 08:23:40 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 196 ms
+2026-09-23 08:23:40 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-23 08:23:40 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-23 08:23:40 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-23 08:23:40 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2026-09-23 08:23:40 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection com.mysql.cj.jdbc.ConnectionImpl@25b1257a
+2026-09-23 08:23:40 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2026-09-23 08:23:40 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-23 08:23:40 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 08:23:40 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-23 08:23:40 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1fa80313, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2bb37154, org.springframework.security.web.context.SecurityContextHolderFilter@3bea5b38, org.springframework.security.web.header.HeaderWriterFilter@59d07da8, org.springframework.web.filter.CorsFilter@346afed7, org.springframework.security.web.csrf.CsrfFilter@72c36318, org.springframework.security.web.authentication.logout.LogoutFilter@75d83eec, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5560f1a7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@f07fb9e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4515a6da, org.springframework.security.web.session.SessionManagementFilter@525829c8, org.springframework.security.web.access.ExceptionTranslationFilter@266911ab, org.springframework.security.web.access.intercept.AuthorizationFilter@178cc040]
+2026-09-23 08:23:40 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-23 08:23:40 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:23:40 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-09-23 08:23:40 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 0.445 seconds (process running for 99.315)
+2026-09-23 08:23:40 INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-09-23 08:24:04 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-23 08:24:04 INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-09-23 08:24:04 INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-09-23 08:25:16 INFO  com.infy.api.AuthAPI - Received forgot-password question request for username: admin1
+2026-09-23 08:25:16 INFO  com.infy.service.AuthServiceImpl - Secret question requested for username: admin1
+2026-09-23 08:25:41 INFO  com.infy.api.AuthAPI - Received forgot-password verify request for username: admin1
+2026-09-23 08:25:41 INFO  com.infy.service.AuthServiceImpl - Forgot-password answer verified for username: admin1, valid for 1 minute(s)
+2026-09-23 08:27:31 INFO  com.infy.api.AuthAPI - Received forgot-password reset request for username: admin1
+2026-09-23 08:27:31 WARN  com.infy.service.AuthServiceImpl - Reset password rejected - secret-answer verification expired for username: admin1
+2026-09-23 08:27:32 WARN  com.infy.exception.GlobalExceptionHandler - Invalid secret answer / forgot-password step ordering: Secret answer verification has expired; please verify the secret answer again
+2026-09-23 08:27:32 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver - Resolved [com.infy.exception.InvalidSecretAnswerException: Secret answer verification has expired; please verify the secret answer again]
+2026-09-23 08:28:20 INFO  com.infy.api.AuthAPI - Received forgot-password question request for username: admin1
+2026-09-23 08:28:20 INFO  com.infy.service.AuthServiceImpl - Secret question requested for username: admin1
+2026-09-23 08:28:34 INFO  com.infy.api.AuthAPI - Received forgot-password verify request for username: admin1
+2026-09-23 08:28:34 INFO  com.infy.service.AuthServiceImpl - Forgot-password answer verified for username: admin1, valid for 1 minute(s)
+2026-09-23 08:28:48 INFO  com.infy.api.AuthAPI - Received forgot-password reset request for username: admin1
+2026-09-23 08:28:48 INFO  com.infy.service.AuthServiceImpl - Password reset successfully for username: admin1
+2026-09-23 08:31:25 INFO  org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-09-23 08:31:25 INFO  org.apache.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:31:25 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 08:31:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2026-09-23 08:31:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2026-09-23 08:31:25 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 29556 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-23 08:31:25 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-23 08:31:25 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-23 08:31:25 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-23 08:31:25 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2026-09-23 08:31:25 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-09-23 08:31:25 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:31:25 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-23 08:31:25 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-23 08:31:25 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-23 08:31:25 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 151 ms
+2026-09-23 08:31:25 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-23 08:31:25 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-23 08:31:25 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-23 08:31:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2026-09-23 08:31:25 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6c3b8e36
+2026-09-23 08:31:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2026-09-23 08:31:25 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-23 08:31:25 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-23 08:31:25 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-23 08:31:25 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3f5fed75, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@484d2355, org.springframework.security.web.context.SecurityContextHolderFilter@36878060, org.springframework.security.web.header.HeaderWriterFilter@7cc1943a, org.springframework.web.filter.CorsFilter@132e8f8d, org.springframework.security.web.csrf.CsrfFilter@180216f6, org.springframework.security.web.authentication.logout.LogoutFilter@43c69467, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@532f1289, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@233f3c92, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@194c32d7, org.springframework.security.web.session.SessionManagementFilter@3eba94e7, org.springframework.security.web.access.ExceptionTranslationFilter@770249f0, org.springframework.security.web.access.intercept.AuthorizationFilter@325707f8]
+2026-09-23 08:31:25 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-23 08:31:25 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-09-23 08:31:25 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-09-23 08:31:25 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 0.369 seconds (process running for 564.019)
+2026-09-23 08:31:25 INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
