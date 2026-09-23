@@ -2,6 +2,7 @@ package com.infy.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,6 @@ import com.infy.dto.ChangePasswordRequestDto;
 import com.infy.service.AuthService;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Only the Change Password endpoint (FE US09) lives here for now. plan.md
@@ -28,12 +28,12 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequestMapping("/api/users")
-@RequiredArgsConstructor
 public class UserAPI {
 
     private static final Logger logger = LoggerFactory.getLogger(UserAPI.class);
 
-    private final AuthService authService;
+    @Autowired
+    private AuthService authService;
 
     @PutMapping("/change-password")
     public ResponseEntity<ApiResponseDto<Void>> changePassword(@Valid @RequestBody ChangePasswordRequestDto request) {

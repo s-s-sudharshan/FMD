@@ -6,6 +6,7 @@ import java.time.Instant;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,10 +39,8 @@ import com.infy.security.CurrentUserResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
@@ -51,19 +50,30 @@ public class AuthServiceImpl implements AuthService {
 
     private static final String FORGOT_PASSWORD_SESSION_PREFIX = "FORGOT_PASSWORD_VERIFIED_AT_";
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final SecurityContextRepository securityContextRepository;
-    private final CurrentUserResolver currentUserResolver;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private SecurityContextRepository securityContextRepository;
+
+    @Autowired
+    private CurrentUserResolver currentUserResolver;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * How long a verified secret answer stays usable before a reset must be
      * re-verified (codex review finding #1 -- the original implementation had
      * no expiry at all). Configurable; defaults to 5 minutes.
      */
-    @Value("${app.forgot-password.verification-ttl-minutes:5}")
+    @Value("${app.forgot-password.verification-ttl-minutes:1}")
     private long forgotPasswordVerificationTtlMinutes;
 
     @Override
@@ -166,7 +176,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Duration ttl = Duration.ofMinutes(forgotPasswordVerificationTtlMinutes);
-        if (Duration.between(verifiedAt, Instant.now()).compareTo(ttl) >= 0) {
+        if (Duration.between(verifiedAt, Instant.now()).compareTo(ttl) > 0) {
             // Expired: consume it so a stale flag can never be reused, then reject.
             session.removeAttribute(FORGOT_PASSWORD_SESSION_PREFIX + request.getUsername());
             logger.warn("Reset password rejected - secret-answer verification expired for username: {}", request.getUsername());

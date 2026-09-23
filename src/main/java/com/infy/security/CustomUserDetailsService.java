@@ -1,5 +1,6 @@
 package com.infy.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.infy.entity.User;
 import com.infy.enums.UserState;
 import com.infy.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * Loads a User by username and maps it to a Spring Security UserDetails.
@@ -20,10 +19,10 @@ import lombok.RequiredArgsConstructor;
  * distinct from a plain bad-credentials failure.
  */
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

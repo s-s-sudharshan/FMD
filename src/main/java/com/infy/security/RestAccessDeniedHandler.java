@@ -2,6 +2,7 @@ package com.infy.security;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -13,7 +14,6 @@ import com.infy.exception.ErrorResponseFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Handles requests Spring Security rejects because an authenticated user
@@ -24,10 +24,10 @@ import lombok.RequiredArgsConstructor;
  * response instead of the planned {@link ErrorResponseDto} JSON shape.
  */
 @Component
-@RequiredArgsConstructor
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
 
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)

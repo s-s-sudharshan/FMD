@@ -2,6 +2,7 @@ package com.infy.security;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -13,7 +14,6 @@ import com.infy.exception.ErrorResponseFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Handles requests Spring Security itself rejects for lack of authentication
@@ -25,10 +25,10 @@ import lombok.RequiredArgsConstructor;
  * 401. Registered via {@code SecurityConfig}'s {@code exceptionHandling()}.
  */
 @Component
-@RequiredArgsConstructor
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
