@@ -23,6 +23,8 @@ public interface AlarmService {
 
     void updateNotes(Long id, AlarmNoteUpdateRequestDto request);
 
-    /** Ingests alarms from simulator XML (BE US16). @return number of alarms ingested (created or re-occurred). */
+    /**
+     * @return number of alarms ingested (created or re-occurred)
+     */
     int ingestAlarmsFromXml(String xml);
 }

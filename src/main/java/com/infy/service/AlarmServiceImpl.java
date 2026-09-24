@@ -59,7 +59,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Autowired
     private AlarmRepository alarmRepository;
-    
+
     @Autowired
     private DeviceRepository deviceRepository;
 
@@ -116,6 +116,12 @@ public class AlarmServiceImpl implements AlarmService {
         logger.info("Notes updated for alarm {}", id);
     }
 
+    /**
+     * A match on a non-terminated alarm (same device, trap, severity) bumps
+     * `occurrence` and re-opens it as UNACKNOWLEDGED, so a recurring fault is
+     * never left looking handled. Manager notes are preserved. If the only
+     * match is TERMINATED (or there is none), a new alarm is created.
+     */
     @Override
     @Transactional
     public int ingestAlarmsFromXml(String xml) {
@@ -132,8 +138,12 @@ public class AlarmServiceImpl implements AlarmService {
                             device, p.trap(), p.severity(), AlarmStatus.TERMINATED);
             if (existing.isPresent()) {
                 Alarm alarm = existing.get();
+                AlarmStatus previous = alarm.getStatus();
                 alarm.setOccurrence(alarm.getOccurrence() + 1);
+                alarm.setStatus(AlarmStatus.UNACKNOWLEDGED);
                 alarmRepository.save(alarm);
+                logger.info("Alarm {} re-occurred (occurrence {}), status {} -> UNACKNOWLEDGED",
+                        alarm.getId(), alarm.getOccurrence(), previous);
             } else {
                 alarmRepository.save(Alarm.builder()
                         .device(device)

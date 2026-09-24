@@ -2192,3 +2192,131 @@ org.springframework.web.HttpRequestMethodNotSupportedException: Request method '
 2026-09-24 07:56:04 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
 2026-09-24 07:56:34 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
 2026-09-24 07:56:34 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-24 08:25:15 INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-09-24 08:25:15 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 24872 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-24 08:25:15 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-24 08:25:15 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-24 08:25:15 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-24 08:25:15 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-24 08:25:16 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-24 08:25:16 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 51 ms. Found 3 JPA repository interfaces.
+2026-09-24 08:25:17 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8765 (http)
+2026-09-24 08:25:17 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8765"]
+2026-09-24 08:25:17 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-24 08:25:17 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-24 08:25:17 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-24 08:25:17 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1717 ms
+2026-09-24 08:25:17 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-24 08:25:17 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-09-24 08:25:17 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-24 08:25:17 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-24 08:25:17 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-24 08:25:18 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@d2b3588
+2026-09-24 08:25:18 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-24 08:25:18 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-24 08:25:18 ERROR org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Failed to initialize JPA EntityManagerFactory: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [device_type] in table [alarms]; found [varchar (Types#VARCHAR)], but expecting [enum ('hub','switch','router') (Types#ENUM)]
+2026-09-24 08:25:18 WARN  org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [device_type] in table [alarms]; found [varchar (Types#VARCHAR)], but expecting [enum ('hub','switch','router') (Types#ENUM)]
+2026-09-24 08:25:18 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-09-24 08:25:18 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-09-24 08:25:18 INFO  org.apache.catalina.core.StandardService - Stopping service [Tomcat]
+2026-09-24 08:25:18 INFO  org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-09-24 08:25:18 ERROR org.springframework.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [device_type] in table [alarms]; found [varchar (Types#VARCHAR)], but expecting [enum ('hub','switch','router') (Types#ENUM)]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1786) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) [spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) [spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) [spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) [spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) [spring-boot-3.2.4.jar:3.2.4]
+	at com.infy.FaultManagementApplication.main(FaultManagementApplication.java:10) [classes/:?]
+	at jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) [spring-boot-devtools-3.2.4.jar:3.2.4]
+Caused by: jakarta.persistence.PersistenceException: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [device_type] in table [alarms]; found [varchar (Types#VARCHAR)], but expecting [enum ('hub','switch','router') (Types#ENUM)]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:421) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782) ~[spring-beans-6.1.5.jar:6.1.5]
+	... 19 more
+Caused by: org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [device_type] in table [alarms]; found [varchar (Types#VARCHAR)], but expecting [enum ('hub','switch','router') (Types#ENUM)]
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.validateColumnType(AbstractSchemaValidator.java:165) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.validateTable(AbstractSchemaValidator.java:152) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.GroupedSchemaValidatorImpl.validateTables(GroupedSchemaValidatorImpl.java:46) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.performValidation(AbstractSchemaValidator.java:97) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.doValidation(AbstractSchemaValidator.java:75) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:295) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at java.util.HashMap.forEach(HashMap.java:1429) ~[?:?]
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507) ~[hibernate-core-6.4.4.Final.jar:6.4.4.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366) ~[spring-orm-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782) ~[spring-beans-6.1.5.jar:6.1.5]
+	... 19 more
+2026-09-24 08:31:01 INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-09-24 08:31:01 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 1272 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-24 08:31:01 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-24 08:31:01 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-24 08:31:01 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-24 08:31:01 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-24 08:31:02 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-24 08:31:02 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 57 ms. Found 3 JPA repository interfaces.
+2026-09-24 08:31:03 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8765 (http)
+2026-09-24 08:31:03 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8765"]
+2026-09-24 08:31:03 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-24 08:31:03 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-24 08:31:03 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-24 08:31:03 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1667 ms
+2026-09-24 08:31:03 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-24 08:31:03 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-09-24 08:31:03 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-24 08:31:04 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-24 08:31:04 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-24 08:31:04 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@e4b9638
+2026-09-24 08:31:04 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-24 08:31:05 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-24 08:31:05 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-24 08:31:05 INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-24 08:31:06 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-24 08:31:06 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@50045b4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4e33250c, org.springframework.security.web.context.SecurityContextHolderFilter@14c91a3a, org.springframework.security.web.header.HeaderWriterFilter@5c6f858b, org.springframework.web.filter.CorsFilter@37894335, org.springframework.security.web.csrf.CsrfFilter@7a026273, org.springframework.security.web.authentication.logout.LogoutFilter@45aaa0fb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6508419a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7b0c8d16, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@ddd7755, org.springframework.security.web.session.SessionManagementFilter@6b3ada5b, org.springframework.security.web.access.ExceptionTranslationFilter@54a09dc2, org.springframework.security.web.access.intercept.AuthorizationFilter@f388810]
+2026-09-24 08:31:06 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-24 08:31:06 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8765"]
+2026-09-24 08:31:06 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8765 (http) with context path ''
+2026-09-24 08:31:06 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 5.31 seconds (process running for 5.995)
+2026-09-24 08:31:17 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-24 08:31:17 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-24 08:31:47 INFO  com.infy.service.AlarmServiceImpl - Alarm 4 re-occurred (occurrence 2), status UNACKNOWLEDGED -> UNACKNOWLEDGED
+2026-09-24 08:31:47 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-24 08:31:47 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-24 08:32:17 INFO  com.infy.service.AlarmServiceImpl - Alarm 17 re-occurred (occurrence 2), status UNACKNOWLEDGED -> UNACKNOWLEDGED
+2026-09-24 08:32:17 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-24 08:32:17 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)
+2026-09-24 08:32:47 INFO  com.infy.service.AlarmServiceImpl - Alarm 19 re-occurred (occurrence 2), status UNACKNOWLEDGED -> UNACKNOWLEDGED
+2026-09-24 08:32:47 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-24 08:32:47 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-24 08:33:17 INFO  com.infy.service.AlarmServiceImpl - Alarm 22 re-occurred (occurrence 2), status UNACKNOWLEDGED -> UNACKNOWLEDGED
+2026-09-24 08:33:17 INFO  com.infy.service.AlarmServiceImpl - Ingested 2 alarm(s) from XML
+2026-09-24 08:33:17 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 2 alarm(s)
+2026-09-24 08:33:47 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-24 08:33:47 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)

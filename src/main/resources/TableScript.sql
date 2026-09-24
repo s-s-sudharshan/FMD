@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS users (
     id              BIGINT AUTO_INCREMENT PRIMARY KEY,
     username        VARCHAR(255) NOT NULL UNIQUE,
     password        VARCHAR(255) NOT NULL,
-    role            VARCHAR(50)  NOT NULL,
-    user_state      VARCHAR(50)  NOT NULL DEFAULT 'ACTIVATED',
-    secret_question VARCHAR(50)  NOT NULL,
+    role            ENUM('ADMIN','OPERATOR','MANAGER') NOT NULL,
+    user_state      ENUM('ACTIVATED','DEACTIVATED') NOT NULL DEFAULT 'ACTIVATED',
+    secret_question ENUM('FIRST_PET','BIRTH_CITY','FAVOURITE_TEACHER','MOTHERS_MAIDEN_NAME','FAVOURITE_BOOK') NOT NULL,
     secret_answer   VARCHAR(255) NOT NULL
 );
 
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS devices (
     id            BIGINT AUTO_INCREMENT PRIMARY KEY,
     serial_number VARCHAR(255) NOT NULL UNIQUE,
     ip_address    VARCHAR(255) NOT NULL UNIQUE,
-    device_type   VARCHAR(50)  NOT NULL,
-    device_state  VARCHAR(50)  NOT NULL DEFAULT 'ACTIVATED'
+    device_type   ENUM('HUB','SWITCH','ROUTER') NOT NULL,
+    device_state  ENUM('ACTIVATED','DEACTIVATED') NOT NULL DEFAULT 'ACTIVATED'
 );
 
 INSERT INTO devices (serial_number, ip_address, device_type, device_state) VALUES
@@ -59,12 +59,12 @@ CREATE TABLE IF NOT EXISTS alarms (
     device_id     BIGINT        NOT NULL,
     device_ip     VARCHAR(255)  NOT NULL,
     serial_number VARCHAR(255)  NOT NULL,
-    device_type   VARCHAR(50)   NOT NULL,
-    severity      VARCHAR(50)   NOT NULL,
-    trap          VARCHAR(100)  NOT NULL,
+    device_type   ENUM('HUB','SWITCH','ROUTER') NOT NULL,
+    severity      ENUM('CLEAR','WARNING','MAJOR','SEVERE','CRITICAL') NOT NULL,
+    trap          ENUM('CBGP_FSM_STATE_CHANGE','CBGP_BACKWARD_TRANSITION','CBGP_PREFIX_THRESHOLD_EXCEEDED','CBGP_PREFIX_THRESHOLD_CLEAR') NOT NULL,
     notes         VARCHAR(1000),
     occurrence    INT           NOT NULL DEFAULT 1,
-    status        VARCHAR(50)   NOT NULL DEFAULT 'UNACKNOWLEDGED',
+    status        ENUM('UNACKNOWLEDGED','ACKNOWLEDGED','CLEARED','TERMINATED') NOT NULL DEFAULT 'UNACKNOWLEDGED',
     created_at    DATETIME(6)   NOT NULL,
     updated_at    DATETIME(6)   NOT NULL,
     CONSTRAINT fk_alarm_device FOREIGN KEY (device_id) REFERENCES devices(id)
