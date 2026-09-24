@@ -27,8 +27,9 @@ import com.infy.service.DeviceService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
-/** Operator Device Management (FE US11-US14 / BE US07-US10) plus reactivate. All endpoints OPERATOR-only. */
+/** Operator Device Management (FE US11-US14 / BE US07-US10) plus reactivate and search. All endpoints OPERATOR-only. */
 @RestController
 @RequestMapping("/api/devices")
 @Validated
@@ -42,14 +43,18 @@ public class DeviceAPI {
     @Autowired
     private Environment environment;
 
-    /** state defaults to ACTIVATED, so existing callers behave exactly as before. */
+    /**
+     * state defaults to ACTIVATED, so existing callers behave exactly as before.
+     * search (optional, max 100 chars) is a case-insensitive partial match on serial number or IP.
+     */
     @GetMapping
     @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<ApiResponseDto<PagedResponseDto<DeviceResponseDto>>> getDevices(
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "{device.page.negative}") int page,
-            @RequestParam(defaultValue = "ACTIVATED") DeviceState state) {
-        logger.info("Received get-devices request for page {} and state {}", page, state);
-        PagedResponseDto<DeviceResponseDto> devices = deviceService.getDevices(page, state);
+            @RequestParam(defaultValue = "ACTIVATED") DeviceState state,
+            @RequestParam(required = false) @Size(max = 100, message = "{search.tooLong}") String search) {
+        logger.info("Received get-devices request for page {}, state {} and search '{}'", page, state, search);
+        PagedResponseDto<DeviceResponseDto> devices = deviceService.getDevices(page, state, search);
         return ResponseEntity.ok(ApiResponseDto.<PagedResponseDto<DeviceResponseDto>>builder()
                 .success(true)
                 .message(environment.getProperty("API.DEVICES_RETRIEVED", "Devices retrieved successfully"))

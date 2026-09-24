@@ -9,7 +9,8 @@ import com.infy.dto.UserResponseDto;
 
 public interface UserService {
 
-    PagedResponseDto<UserResponseDto> getAllUsers(int page);
+    /** @param search optional case-insensitive partial username match; null/blank = no filter. */
+    PagedResponseDto<UserResponseDto> getAllUsers(int page, String search);
 
     UserResponseDto addUser(UserRequestDto request);
 

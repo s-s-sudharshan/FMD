@@ -10,8 +10,11 @@ import com.infy.enums.DeviceState;
 
 public interface DeviceService {
 
-    /** Paged device list for the given state (ACTIVATED or DEACTIVATED). */
-    PagedResponseDto<DeviceResponseDto> getDevices(int page, DeviceState state);
+    /**
+     * Paged device list for the given state (ACTIVATED or DEACTIVATED).
+     * @param search optional case-insensitive partial match on serial number or IP; null/blank = no filter.
+     */
+    PagedResponseDto<DeviceResponseDto> getDevices(int page, DeviceState state, String search);
 
     DeviceResponseDto addDevice(DeviceRequestDto request);
 

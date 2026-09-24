@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.infy.dto.ActivateDeviceRequestDto;
 import com.infy.dto.DeactivateDeviceRequestDto;
@@ -28,9 +30,9 @@ import com.infy.exception.InvalidStateChangeException;
 import com.infy.repository.DeviceRepository;
 
 /**
- * BE US07-US10 (Phase 3 Operator Device Management) plus reactivate. Devices
- * are soft-deleted only; a deactivated device keeps its serial/IP, so those
- * stay reserved (unique constraints) and alarm history remains valid --
+ * BE US07-US10 (Phase 3 Operator Device Management) plus reactivate and search.
+ * Devices are soft-deleted only; a deactivated device keeps its serial/IP, so
+ * those stay reserved (unique constraints) and alarm history remains valid --
  * which is also why reactivating can never hit a duplicate conflict.
  */
 @Service
@@ -51,11 +53,14 @@ public class DeviceServiceImpl implements DeviceService {
     private ModelMapper modelMapper;
 
     @Override
-    public PagedResponseDto<DeviceResponseDto> getDevices(int page, DeviceState state) {
-        Page<Device> devicePage = deviceRepository.findByDeviceState(
-                state, PageRequest.of(page, PAGE_SIZE, Sort.by("id")));
-        logger.info("Fetched {} device list page {} ({} of {} total, {} page(s))",
-                state, page, devicePage.getNumberOfElements(), devicePage.getTotalElements(), devicePage.getTotalPages());
+    public PagedResponseDto<DeviceResponseDto> getDevices(int page, DeviceState state, String search) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("id"));
+        // Blank/missing search falls back to the existing unfiltered (per-state) query.
+        Page<Device> devicePage = StringUtils.hasText(search)
+                ? deviceRepository.searchByState(state, search.trim(), pageable)
+                : deviceRepository.findByDeviceState(state, pageable);
+        logger.info("Fetched {} device list page {} search '{}' ({} of {} total, {} page(s))",
+                state, page, search, devicePage.getNumberOfElements(), devicePage.getTotalElements(), devicePage.getTotalPages());
         List<DeviceResponseDto> content = devicePage.getContent().stream()
                 .map(device -> modelMapper.map(device, DeviceResponseDto.class))
                 .collect(Collectors.toList());

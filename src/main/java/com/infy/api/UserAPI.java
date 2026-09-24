@@ -28,6 +28,7 @@ import com.infy.service.UserService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 /**
  * Phase 1 built only PUT /change-password here (FE US09), owned by
@@ -43,7 +44,9 @@ import jakarta.validation.constraints.Min;
  * exception handler instead of a 400 validation error.
  *
  * GET /api/users returns a PagedResponseDto (content + totalPages etc.)
- * instead of a bare list, so the frontend can render page numbers.
+ * instead of a bare list, so the frontend can render page numbers. It also
+ * takes an optional case-insensitive partial-match {@code search} on username
+ * (max 100 chars, longer -> 400 through the ConstraintViolationException handler).
  */
 @RestController
 @RequestMapping("/api/users")
@@ -74,9 +77,10 @@ public class UserAPI {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto<PagedResponseDto<UserResponseDto>>> getAllUsers(
-            @RequestParam(defaultValue = "0") @Min(value = 0, message = "{user.page.negative}") int page) {
-        logger.info("Received get-all-users request for page {}", page);
-        PagedResponseDto<UserResponseDto> users = userService.getAllUsers(page);
+            @RequestParam(defaultValue = "0") @Min(value = 0, message = "{user.page.negative}") int page,
+            @RequestParam(required = false) @Size(max = 100, message = "{search.tooLong}") String search) {
+        logger.info("Received get-all-users request for page {} with search '{}'", page, search);
+        PagedResponseDto<UserResponseDto> users = userService.getAllUsers(page, search);
         return ResponseEntity.ok(ApiResponseDto.<PagedResponseDto<UserResponseDto>>builder()
                 .success(true)
                 .message(environment.getProperty("API.USERS_RETRIEVED", "Users retrieved successfully"))

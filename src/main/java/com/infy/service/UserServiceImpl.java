@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.infy.dto.ActivateUserRequestDto;
 import com.infy.dto.ChangeRoleRequestDto;
@@ -31,7 +33,7 @@ import com.infy.exception.WeakPasswordException;
 import com.infy.repository.UserRepository;
 
 /**
- * BE US02-US05 (Phase 2 Admin User Management) plus reactivate. The
+ * BE US02-US05 (Phase 2 Admin User Management) plus reactivate and search. The
  * password-strength check below intentionally mirrors
  * AuthServiceImpl.validateNewPassword() (same MIN_PASSWORD_LENGTH rule, same
  * Service.WEAK_PASSWORD message key) rather than being extracted into a
@@ -59,11 +61,15 @@ public class UserServiceImpl implements UserService {
     private Environment environment;
 
     @Override
-    public PagedResponseDto<UserResponseDto> getAllUsers(int page) {
+    public PagedResponseDto<UserResponseDto> getAllUsers(int page, String search) {
         // Sorted by id so page boundaries are stable between requests.
-        Page<User> userPage = userRepository.findAll(PageRequest.of(page, PAGE_SIZE, Sort.by("id")));
-        logger.info("Fetched user list page {} ({} of {} total users, {} page(s))",
-                page, userPage.getNumberOfElements(), userPage.getTotalElements(), userPage.getTotalPages());
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.by("id"));
+        // Blank/missing search falls back to the existing unfiltered query.
+        Page<User> userPage = StringUtils.hasText(search)
+                ? userRepository.findByUsernameContainingIgnoreCase(search.trim(), pageable)
+                : userRepository.findAll(pageable);
+        logger.info("Fetched user list page {} search '{}' ({} of {} total users, {} page(s))",
+                page, search, userPage.getNumberOfElements(), userPage.getTotalElements(), userPage.getTotalPages());
         List<UserResponseDto> content = userPage.getContent().stream()
                 .map(user -> modelMapper.map(user, UserResponseDto.class))
                 .collect(Collectors.toList());

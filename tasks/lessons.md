@@ -32,3 +32,10 @@
   The first Phase 7 ingestion only incremented `occurrence`, leaving a recurring fault marked
   ACKNOWLEDGED/CLEARED so it looked handled. For any "same event happens again" rule, decide
   explicitly which state fields reset, and add a test for each starting status.
+  
+- **A derived Spring Data query and a hand-written `@Query` do not treat `%` and `_` the same.** `findByXContainingIgnoreCase` escapes LIKE wildcards, while `like concat('%', :s, '%')` in JPQL does not. When one feature uses both approaches, document the difference in `todo.md` so testing is not surprised by inconsistent behavior.
+
+- **Keep `todo.md` aligned with plan changes, not only code changes.** When a decision drops or defers work, update its checkbox immediately. Before marking a behavior as done, verify that the code actually implements it.
+
+- **Read uploaded plan files from disk first.** The conversation provides only the file path, not necessarily the file contents. 
+  

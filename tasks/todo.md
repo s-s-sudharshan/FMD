@@ -214,3 +214,33 @@ No SecurityConfig / GlobalExceptionHandler / pom.xml change. Not built/run here 
 - [ ] Verify: recurrence after TERMINATED creates a new row
 Not covered: unit/integration tests (Phase 6 skipped by request).
 
+## Extra Features (extra-features-plan.md)
+
+### Extra 1 — Reactivate user / device
+
+- [x] ActivateUserRequestDto, ActivateDeviceRequestDto, InvalidStateChangeException
+- [x] UserService(Impl).activateUser, DeviceService(Impl).activateDevice, PUT /api/users/activate, PUT /api/devices/activate
+- [x] DeviceAPI GET gains `state` param; GlobalExceptionHandler handlers (InvalidStateChangeException, MethodArgumentTypeMismatchException)
+- [x] application.properties: Service.*_ALREADY_ACTIVE, API.*_ACTIVATED
+
+### Extra 2 — Search
+
+- [x] repository/UserRepository — `findByUsernameContainingIgnoreCase(String, Pageable)`
+- [x] repository/DeviceRepository — `searchByState(state, search, Pageable)` (`@Query`, serial OR IP, lower-cased)
+- [x] service/UserService(Impl) — `getAllUsers(page, search)`
+- [x] service/DeviceService(Impl) — `getDevices(page, state, search)`
+- [x] api/UserAPI, api/DeviceAPI — `@RequestParam(required = false) @Size(max = 100) String search`
+- [x] ValidationMessages.properties — `search.tooLong`
+- [x] Behaviour: input is trimmed; blank/missing = existing unfiltered query; sort stays `id`; `totalElements`/`totalPages` reflect the filtered result; >100 chars returns 400 through the `ConstraintViolationException` handler.
+- [x] Known quirk: user search escapes `%`/`_` through the Spring Data derived query, while device search does not because it uses a custom `@Query`. Therefore `%` and `_` act as wildcards for device search only; accepted per plan B2.
+- [ ] Verify: `search=OPER` matches `operator1`; `search=1001` and `search=192.168.1.1` match devices; blank search returns all; 101 characters returns 400; search combines with `state=DEACTIVATED`.
+
+### Extra 3 — Audit trail + recurrence re-open: pending
+
+### Extra 4 — SSE: pending
+
+### Housekeeping corrections to earlier entries
+
+- [x] Phase 2 post-review P1 (`SessionUserStatusFilter`) changed from open to **not built (decision)**; see `plan.md` Section 12.
+- [ ] Phase 7 recurrence re-open remains pending: `ingestAlarmsFromXml` currently increments only `occurrence`; it will be fixed in Extra 3.
+
