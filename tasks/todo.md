@@ -201,3 +201,16 @@ No SecurityConfig / pom.xml change. Not built/run here (no Maven Central egress)
 - [x] AlarmRepository (2 grouped-count queries), ValidationMessages (report.*), application.properties (API.REPORT_GENERATED)
 Scope: counts all alarms (incl. TERMINATED and deactivated devices); zero-count slices always returned.
 No SecurityConfig / GlobalExceptionHandler / pom.xml change. Not built/run here (no Maven Central egress).
+
+
+## Phase 7 — Simulator (BE US16)
+- [x] simulator/AlarmXmlGenerator, AlarmXmlParser, AlarmSimulatorJob; config/SchedulingConfig
+- [x] AlarmService(Impl).ingestAlarmsFromXml (returns int); DeviceRepository.findByIpAddress/findAllByDeviceState;
+      AlarmRepository.findFirstByDeviceAndTrapAndSeverityAndStatusNotOrderByIdDesc
+- [x] application.properties — app.simulator.* (enabled, interval-ms, initial-delay-ms, max-alarms-per-run)
+- [x] Recurrence re-opens a non-terminated alarm (occurrence+1, status -> UNACKNOWLEDGED); TERMINATED match creates a new alarm
+- [x] Verified: app starts, simulator inserts new alarms into the alarms table
+- [ ] Verify: ACKNOWLEDGED/CLEARED alarm re-opens to UNACKNOWLEDGED on recurrence
+- [ ] Verify: recurrence after TERMINATED creates a new row
+Not covered: unit/integration tests (Phase 6 skipped by request).
+

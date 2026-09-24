@@ -28,3 +28,7 @@
   affected user happens to log out. Call this out at design time for every
   future "change a user's access" story, not just after a review catches it.
   
+ - **When a design hook says "re-occurrence," define what it does to lifecycle state, not just counters.**
+  The first Phase 7 ingestion only incremented `occurrence`, leaving a recurring fault marked
+  ACKNOWLEDGED/CLEARED so it looked handled. For any "same event happens again" rule, decide
+  explicitly which state fields reset, and add a test for each starting status.
