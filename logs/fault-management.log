@@ -2150,3 +2150,45 @@ org.springframework.web.HttpRequestMethodNotSupportedException: Request method '
 2026-09-24 02:04:03 INFO  com.infy.service.ReportServiceImpl - Generated SEVERITY report with 5 slice(s)
 2026-09-24 02:08:09 INFO  com.infy.api.ReportAPI - Received report request of type STATUS
 2026-09-24 02:08:09 INFO  com.infy.service.ReportServiceImpl - Generated STATUS report with 4 slice(s)
+2026-09-24 07:53:46 INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-09-24 07:53:46 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 26932 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-24 07:53:46 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-24 07:53:46 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-24 07:53:46 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-24 07:53:46 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-24 07:53:48 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-24 07:53:48 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 58 ms. Found 3 JPA repository interfaces.
+2026-09-24 07:53:49 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8765 (http)
+2026-09-24 07:53:49 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8765"]
+2026-09-24 07:53:49 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-24 07:53:49 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-24 07:53:49 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-24 07:53:49 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3264 ms
+2026-09-24 07:53:50 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-24 07:53:50 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-09-24 07:53:50 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-24 07:53:50 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-24 07:53:50 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-24 07:53:50 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1ebb098b
+2026-09-24 07:53:50 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-24 07:53:51 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-24 07:53:52 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-24 07:53:52 INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-24 07:53:53 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-24 07:53:53 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@636e1e45, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@767529fe, org.springframework.security.web.context.SecurityContextHolderFilter@4508d911, org.springframework.security.web.header.HeaderWriterFilter@10588bfb, org.springframework.web.filter.CorsFilter@682464cc, org.springframework.security.web.csrf.CsrfFilter@50d9ee3, org.springframework.security.web.authentication.logout.LogoutFilter@7ae315ee, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@16301305, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4ae09bd0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@52076f5d, org.springframework.security.web.session.SessionManagementFilter@7164c059, org.springframework.security.web.access.ExceptionTranslationFilter@7ac31dbe, org.springframework.security.web.access.intercept.AuthorizationFilter@38e5ad63]
+2026-09-24 07:53:53 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-24 07:53:53 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8765"]
+2026-09-24 07:53:53 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8765 (http) with context path ''
+2026-09-24 07:53:53 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 7.617 seconds (process running for 13.431)
+2026-09-24 07:54:03 INFO  com.infy.service.AlarmServiceImpl - Ingested 2 alarm(s) from XML
+2026-09-24 07:54:03 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 2 alarm(s)
+2026-09-24 07:54:33 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-24 07:54:33 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)
+2026-09-24 07:55:03 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-24 07:55:03 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-24 07:55:34 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-24 07:55:34 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-24 07:56:04 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-24 07:56:04 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-24 07:56:34 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-24 07:56:34 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)

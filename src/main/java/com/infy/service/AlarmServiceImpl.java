@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,11 +24,14 @@ import com.infy.dto.AlarmResponseDto;
 import com.infy.dto.AlarmSearchRequestDto;
 import com.infy.dto.BulkAlarmActionRequestDto;
 import com.infy.entity.Alarm;
+import com.infy.entity.Device;
 import com.infy.enums.AlarmStatus;
 import com.infy.enums.DeviceState;
 import com.infy.exception.AlarmNotFoundException;
 import com.infy.exception.InvalidAlarmStateTransitionException;
 import com.infy.repository.AlarmRepository;
+import com.infy.repository.DeviceRepository;
+import com.infy.simulator.AlarmXmlParser;
 
 import jakarta.persistence.criteria.Predicate;
 
@@ -55,6 +59,12 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Autowired
     private AlarmRepository alarmRepository;
+    
+    @Autowired
+    private DeviceRepository deviceRepository;
+
+    @Autowired
+    private AlarmXmlParser alarmXmlParser;
 
     @Override
     @Transactional(readOnly = true)
@@ -107,8 +117,38 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
-    public void ingestAlarmsFromXml(String xml) {
-        throw new UnsupportedOperationException("Simulator (BE US16) is deferred to Phase 7");
+    @Transactional
+    public int ingestAlarmsFromXml(String xml) {
+        int ingested = 0;
+        for (AlarmXmlParser.ParsedAlarm p : alarmXmlParser.parse(xml)) {
+            Optional<Device> found = deviceRepository.findByIpAddress(p.deviceIp());
+            if (found.isEmpty() || found.get().getDeviceState() != DeviceState.ACTIVATED) {
+                logger.warn("Ingest skipped - no active device with IP {}", p.deviceIp());
+                continue;
+            }
+            Device device = found.get();
+            Optional<Alarm> existing = alarmRepository
+                    .findFirstByDeviceAndTrapAndSeverityAndStatusNotOrderByIdDesc(
+                            device, p.trap(), p.severity(), AlarmStatus.TERMINATED);
+            if (existing.isPresent()) {
+                Alarm alarm = existing.get();
+                alarm.setOccurrence(alarm.getOccurrence() + 1);
+                alarmRepository.save(alarm);
+            } else {
+                alarmRepository.save(Alarm.builder()
+                        .device(device)
+                        .deviceIp(device.getIpAddress())
+                        .serialNumber(device.getSerialNumber())
+                        .deviceType(device.getDeviceType())
+                        .severity(p.severity())
+                        .trap(p.trap())
+                        .notes(p.notes())
+                        .build());
+            }
+            ingested++;
+        }
+        logger.info("Ingested {} alarm(s) from XML", ingested);
+        return ingested;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.infy.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -23,4 +24,8 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     boolean existsByIpAddressAndIdNot(String ipAddress, Long id);
 
     Page<Device> findByDeviceState(DeviceState deviceState, Pageable pageable);
+    
+    Optional<Device> findByIpAddress(String ipAddress);
+
+    List<Device> findAllByDeviceState(DeviceState deviceState);
 }

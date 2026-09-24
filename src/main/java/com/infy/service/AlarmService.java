@@ -23,6 +23,6 @@ public interface AlarmService {
 
     void updateNotes(Long id, AlarmNoteUpdateRequestDto request);
 
-    /** Design hook for the deferred Simulator (BE US16, Phase 7). Not implemented yet. */
-    void ingestAlarmsFromXml(String xml);
+    /** Ingests alarms from simulator XML (BE US16). @return number of alarms ingested (created or re-occurred). */
+    int ingestAlarmsFromXml(String xml);
 }
