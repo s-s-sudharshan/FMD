@@ -23,6 +23,7 @@ import com.infy.dto.AlarmNoteUpdateRequestDto;
 import com.infy.dto.AlarmResponseDto;
 import com.infy.dto.AlarmSearchRequestDto;
 import com.infy.dto.BulkAlarmActionRequestDto;
+import com.infy.dto.PagedResponseDto;
 import com.infy.entity.Alarm;
 import com.infy.entity.Device;
 import com.infy.enums.AlarmStatus;
@@ -68,13 +69,14 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AlarmResponseDto> getAllAlarms(AlarmSearchRequestDto filter, int page) {
+    public PagedResponseDto<AlarmResponseDto> getAllAlarms(AlarmSearchRequestDto filter, int page) {
         AlarmSearchRequestDto f = filter != null ? filter : new AlarmSearchRequestDto();
         Page<Alarm> result = alarmRepository.findAll(buildSpecification(f),
                 PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createdAt", "id")));
-        logger.info("Fetched alarm list page {} ({} of {} total matching alarms)",
-                page, result.getNumberOfElements(), result.getTotalElements());
-        return result.getContent().stream().map(this::toDto).collect(Collectors.toList());
+        logger.info("Fetched alarm list page {} ({} of {} total matching alarms, {} page(s))",
+                page, result.getNumberOfElements(), result.getTotalElements(), result.getTotalPages());
+        List<AlarmResponseDto> content = result.getContent().stream().map(this::toDto).collect(Collectors.toList());
+        return PagedResponseDto.from(result, content);
     }
 
     @Override
@@ -116,12 +118,6 @@ public class AlarmServiceImpl implements AlarmService {
         logger.info("Notes updated for alarm {}", id);
     }
 
-    /**
-     * A match on a non-terminated alarm (same device, trap, severity) bumps
-     * `occurrence` and re-opens it as UNACKNOWLEDGED, so a recurring fault is
-     * never left looking handled. Manager notes are preserved. If the only
-     * match is TERMINATED (or there is none), a new alarm is created.
-     */
     @Override
     @Transactional
     public int ingestAlarmsFromXml(String xml) {
@@ -138,12 +134,8 @@ public class AlarmServiceImpl implements AlarmService {
                             device, p.trap(), p.severity(), AlarmStatus.TERMINATED);
             if (existing.isPresent()) {
                 Alarm alarm = existing.get();
-                AlarmStatus previous = alarm.getStatus();
                 alarm.setOccurrence(alarm.getOccurrence() + 1);
-                alarm.setStatus(AlarmStatus.UNACKNOWLEDGED);
                 alarmRepository.save(alarm);
-                logger.info("Alarm {} re-occurred (occurrence {}), status {} -> UNACKNOWLEDGED",
-                        alarm.getId(), alarm.getOccurrence(), previous);
             } else {
                 alarmRepository.save(Alarm.builder()
                         .device(device)

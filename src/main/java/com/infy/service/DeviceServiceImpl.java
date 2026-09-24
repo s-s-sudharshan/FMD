@@ -13,21 +13,25 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.infy.dto.ActivateDeviceRequestDto;
 import com.infy.dto.DeactivateDeviceRequestDto;
 import com.infy.dto.DeviceRequestDto;
 import com.infy.dto.DeviceResponseDto;
 import com.infy.dto.EditDeviceRequestDto;
+import com.infy.dto.PagedResponseDto;
 import com.infy.entity.Device;
 import com.infy.enums.DeviceState;
 import com.infy.exception.DeviceNotFoundException;
 import com.infy.exception.DuplicateDeviceException;
 import com.infy.exception.InvalidIpAddressException;
+import com.infy.exception.InvalidStateChangeException;
 import com.infy.repository.DeviceRepository;
 
 /**
- * BE US07-US10 (Phase 3 Operator Device Management). Devices are soft-deleted
- * only; a deactivated device keeps its serial/IP, so those stay reserved
- * (unique constraints) and alarm history remains valid.
+ * BE US07-US10 (Phase 3 Operator Device Management) plus reactivate. Devices
+ * are soft-deleted only; a deactivated device keeps its serial/IP, so those
+ * stay reserved (unique constraints) and alarm history remains valid --
+ * which is also why reactivating can never hit a duplicate conflict.
  */
 @Service
 public class DeviceServiceImpl implements DeviceService {
@@ -47,14 +51,15 @@ public class DeviceServiceImpl implements DeviceService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<DeviceResponseDto> getAllActiveDevices(int page) {
+    public PagedResponseDto<DeviceResponseDto> getDevices(int page, DeviceState state) {
         Page<Device> devicePage = deviceRepository.findByDeviceState(
-                DeviceState.ACTIVATED, PageRequest.of(page, PAGE_SIZE, Sort.by("id")));
-        logger.info("Fetched active device list page {} ({} of {} total active devices)",
-                page, devicePage.getNumberOfElements(), devicePage.getTotalElements());
-        return devicePage.getContent().stream()
+                state, PageRequest.of(page, PAGE_SIZE, Sort.by("id")));
+        logger.info("Fetched {} device list page {} ({} of {} total, {} page(s))",
+                state, page, devicePage.getNumberOfElements(), devicePage.getTotalElements(), devicePage.getTotalPages());
+        List<DeviceResponseDto> content = devicePage.getContent().stream()
                 .map(device -> modelMapper.map(device, DeviceResponseDto.class))
                 .collect(Collectors.toList());
+        return PagedResponseDto.from(devicePage, content);
     }
 
     @Override
@@ -116,6 +121,23 @@ public class DeviceServiceImpl implements DeviceService {
         device.setDeviceState(DeviceState.DEACTIVATED);
         deviceRepository.save(device);
         logger.info("Device deactivated: {}", device.getSerialNumber());
+    }
+
+    @Override
+    public void activateDevice(ActivateDeviceRequestDto request) {
+        String serialNumber = request.getSerialNumber().trim();
+        // Deliberately NOT findActiveDevice(): that hides deactivated devices, which is exactly what we look for here.
+        Device device = deviceRepository.findBySerialNumber(serialNumber)
+                .orElseThrow(() -> new DeviceNotFoundException("Service.DEVICE_NOT_FOUND"));
+
+        if (device.getDeviceState() == DeviceState.ACTIVATED) {
+            logger.warn("Activate device rejected - device already activated: {}", serialNumber);
+            throw new InvalidStateChangeException("Service.DEVICE_ALREADY_ACTIVE");
+        }
+
+        device.setDeviceState(DeviceState.ACTIVATED);
+        deviceRepository.save(device);
+        logger.info("Device activated: {}", serialNumber);
     }
 
     /** A deactivated device is treated as "not found" for edit/deactivate: it is no longer operator-visible. */

@@ -11,28 +11,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.infy.dto.ActivateUserRequestDto;
 import com.infy.dto.ChangeRoleRequestDto;
 import com.infy.dto.DeactivateUserRequestDto;
+import com.infy.dto.PagedResponseDto;
 import com.infy.dto.UserRequestDto;
 import com.infy.dto.UserResponseDto;
 import com.infy.entity.User;
 import com.infy.enums.UserState;
 import com.infy.exception.DuplicateUsernameException;
 import com.infy.exception.InvalidRoleChangeException;
+import com.infy.exception.InvalidStateChangeException;
 import com.infy.exception.UserNotFoundException;
 import com.infy.exception.WeakPasswordException;
 import com.infy.repository.UserRepository;
 
 /**
- * BE US02-US05 (Phase 2 Admin User Management). The password-strength check
- * below intentionally mirrors AuthServiceImpl.validateNewPassword() (same
- * MIN_PASSWORD_LENGTH rule, same Service.WEAK_PASSWORD message key) rather
- * than being extracted into a shared helper -- AuthServiceImpl is
- * Phase-1-verified code and is left untouched per the "don't modify Phase 1
- * unnecessarily" instruction.
+ * BE US02-US05 (Phase 2 Admin User Management) plus reactivate. The
+ * password-strength check below intentionally mirrors
+ * AuthServiceImpl.validateNewPassword() (same MIN_PASSWORD_LENGTH rule, same
+ * Service.WEAK_PASSWORD message key) rather than being extracted into a
+ * shared helper -- AuthServiceImpl is Phase-1-verified code and is left
+ * untouched per the "don't modify Phase 1 unnecessarily" instruction.
  */
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,13 +59,15 @@ public class UserServiceImpl implements UserService {
     private Environment environment;
 
     @Override
-    public List<UserResponseDto> getAllUsers(int page) {
-        Page<User> userPage = userRepository.findAll(PageRequest.of(page, PAGE_SIZE));
-        logger.info("Fetched user list page {} ({} of {} total users)",
-                page, userPage.getNumberOfElements(), userPage.getTotalElements());
-        return userPage.getContent().stream()
+    public PagedResponseDto<UserResponseDto> getAllUsers(int page) {
+        // Sorted by id so page boundaries are stable between requests.
+        Page<User> userPage = userRepository.findAll(PageRequest.of(page, PAGE_SIZE, Sort.by("id")));
+        logger.info("Fetched user list page {} ({} of {} total users, {} page(s))",
+                page, userPage.getNumberOfElements(), userPage.getTotalElements(), userPage.getTotalPages());
+        List<UserResponseDto> content = userPage.getContent().stream()
                 .map(user -> modelMapper.map(user, UserResponseDto.class))
                 .collect(Collectors.toList());
+        return PagedResponseDto.from(userPage, content);
     }
 
     @Override
@@ -110,6 +116,21 @@ public class UserServiceImpl implements UserService {
         user.setUserState(UserState.DEACTIVATED);
         userRepository.save(user);
         logger.info("User deactivated: {}", request.getUsername());
+    }
+
+    @Override
+    public void activateUser(ActivateUserRequestDto request) {
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("Service.USER_NOT_FOUND"));
+
+        if (user.getUserState() == UserState.ACTIVATED) {
+            logger.warn("Activate user rejected - username {} is already activated", request.getUsername());
+            throw new InvalidStateChangeException("Service.USER_ALREADY_ACTIVE");
+        }
+
+        user.setUserState(UserState.ACTIVATED);
+        userRepository.save(user);
+        logger.info("User activated: {}", request.getUsername());
     }
 
     private void validatePasswordStrength(String password) {

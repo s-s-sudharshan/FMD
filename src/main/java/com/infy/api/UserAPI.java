@@ -1,7 +1,5 @@
 package com.infy.api;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.infy.dto.ActivateUserRequestDto;
 import com.infy.dto.ApiResponseDto;
 import com.infy.dto.ChangePasswordRequestDto;
 import com.infy.dto.ChangeRoleRequestDto;
 import com.infy.dto.DeactivateUserRequestDto;
+import com.infy.dto.PagedResponseDto;
 import com.infy.dto.UserRequestDto;
 import com.infy.dto.UserResponseDto;
 import com.infy.service.AuthService;
@@ -34,11 +34,16 @@ import jakarta.validation.constraints.Min;
  * AuthService per the resolution recorded in tasks/todo.md -- left untouched.
  * Phase 2 added Admin User Management (FE US03-US06 / BE US02-US05), backed
  * by UserService/UserServiceImpl, all restricted to ADMIN via @PreAuthorize.
+ * PUT /activate (reactivate a soft-deleted user) is the counterpart of
+ * PUT /deactivate.
  *
  * @Validated (class-level) + @Min(0) on getAllUsers' page param fixes P2 in
  * phase2_review_actions.md: page=-1 used to reach PageRequest.of(-1, 10),
  * throw IllegalArgumentException, and surface as a 500 via the generic
  * exception handler instead of a 400 validation error.
+ *
+ * GET /api/users returns a PagedResponseDto (content + totalPages etc.)
+ * instead of a bare list, so the frontend can render page numbers.
  */
 @RestController
 @RequestMapping("/api/users")
@@ -68,11 +73,11 @@ public class UserAPI {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponseDto<List<UserResponseDto>>> getAllUsers(
+    public ResponseEntity<ApiResponseDto<PagedResponseDto<UserResponseDto>>> getAllUsers(
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "{user.page.negative}") int page) {
         logger.info("Received get-all-users request for page {}", page);
-        List<UserResponseDto> users = userService.getAllUsers(page);
-        return ResponseEntity.ok(ApiResponseDto.<List<UserResponseDto>>builder()
+        PagedResponseDto<UserResponseDto> users = userService.getAllUsers(page);
+        return ResponseEntity.ok(ApiResponseDto.<PagedResponseDto<UserResponseDto>>builder()
                 .success(true)
                 .message(environment.getProperty("API.USERS_RETRIEVED", "Users retrieved successfully"))
                 .data(users)
@@ -110,6 +115,17 @@ public class UserAPI {
         return ResponseEntity.ok(ApiResponseDto.<Void>builder()
                 .success(true)
                 .message(environment.getProperty("API.USER_DEACTIVATED", "User deactivated successfully"))
+                .build());
+    }
+
+    @PutMapping("/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponseDto<Void>> activateUser(@Valid @RequestBody ActivateUserRequestDto request) {
+        logger.info("Received activate-user request for username: {}", request.getUsername());
+        userService.activateUser(request);
+        return ResponseEntity.ok(ApiResponseDto.<Void>builder()
+                .success(true)
+                .message(environment.getProperty("API.USER_ACTIVATED", "User activated successfully"))
                 .build());
     }
 }

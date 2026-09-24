@@ -1,7 +1,5 @@
 package com.infy.api;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.infy.dto.ActivateDeviceRequestDto;
 import com.infy.dto.ApiResponseDto;
 import com.infy.dto.DeactivateDeviceRequestDto;
 import com.infy.dto.DeviceRequestDto;
 import com.infy.dto.DeviceResponseDto;
 import com.infy.dto.EditDeviceRequestDto;
+import com.infy.dto.PagedResponseDto;
+import com.infy.enums.DeviceState;
 import com.infy.service.DeviceService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
-/** Operator Device Management (FE US11-US14 / BE US07-US10). All endpoints OPERATOR-only. */
+/** Operator Device Management (FE US11-US14 / BE US07-US10) plus reactivate. All endpoints OPERATOR-only. */
 @RestController
 @RequestMapping("/api/devices")
 @Validated
@@ -41,13 +42,15 @@ public class DeviceAPI {
     @Autowired
     private Environment environment;
 
+    /** state defaults to ACTIVATED, so existing callers behave exactly as before. */
     @GetMapping
     @PreAuthorize("hasRole('OPERATOR')")
-    public ResponseEntity<ApiResponseDto<List<DeviceResponseDto>>> getAllDevices(
-            @RequestParam(defaultValue = "0") @Min(value = 0, message = "{device.page.negative}") int page) {
-        logger.info("Received get-all-devices request for page {}", page);
-        List<DeviceResponseDto> devices = deviceService.getAllActiveDevices(page);
-        return ResponseEntity.ok(ApiResponseDto.<List<DeviceResponseDto>>builder()
+    public ResponseEntity<ApiResponseDto<PagedResponseDto<DeviceResponseDto>>> getDevices(
+            @RequestParam(defaultValue = "0") @Min(value = 0, message = "{device.page.negative}") int page,
+            @RequestParam(defaultValue = "ACTIVATED") DeviceState state) {
+        logger.info("Received get-devices request for page {} and state {}", page, state);
+        PagedResponseDto<DeviceResponseDto> devices = deviceService.getDevices(page, state);
+        return ResponseEntity.ok(ApiResponseDto.<PagedResponseDto<DeviceResponseDto>>builder()
                 .success(true)
                 .message(environment.getProperty("API.DEVICES_RETRIEVED", "Devices retrieved successfully"))
                 .data(devices)
@@ -85,6 +88,17 @@ public class DeviceAPI {
         return ResponseEntity.ok(ApiResponseDto.<Void>builder()
                 .success(true)
                 .message(environment.getProperty("API.DEVICE_DEACTIVATED", "Device deactivated successfully"))
+                .build());
+    }
+
+    @PutMapping("/activate")
+    @PreAuthorize("hasRole('OPERATOR')")
+    public ResponseEntity<ApiResponseDto<Void>> activateDevice(@Valid @RequestBody ActivateDeviceRequestDto request) {
+        logger.info("Received activate-device request for serial: {}", request.getSerialNumber());
+        deviceService.activateDevice(request);
+        return ResponseEntity.ok(ApiResponseDto.<Void>builder()
+                .success(true)
+                .message(environment.getProperty("API.DEVICE_ACTIVATED", "Device activated successfully"))
                 .build());
     }
 }

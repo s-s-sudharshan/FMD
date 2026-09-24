@@ -1,7 +1,5 @@
 package com.infy.api;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,7 @@ import com.infy.dto.AlarmResponseDto;
 import com.infy.dto.AlarmSearchRequestDto;
 import com.infy.dto.ApiResponseDto;
 import com.infy.dto.BulkAlarmActionRequestDto;
+import com.infy.dto.PagedResponseDto;
 import com.infy.service.AlarmService;
 
 import jakarta.validation.Valid;
@@ -45,11 +44,11 @@ public class AlarmAPI {
     private Environment environment;
 
     @GetMapping
-    public ResponseEntity<ApiResponseDto<List<AlarmResponseDto>>> getAllAlarms(
+    public ResponseEntity<ApiResponseDto<PagedResponseDto<AlarmResponseDto>>> getAllAlarms(
             AlarmSearchRequestDto filter,
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "{alarm.page.negative}") int page) {
         logger.info("Received get-alarms request for page {} with filter {}", page, filter);
-        List<AlarmResponseDto> alarms = alarmService.getAllAlarms(filter, page);
+        PagedResponseDto<AlarmResponseDto> alarms = alarmService.getAllAlarms(filter, page);
         return ok("API.ALARMS_RETRIEVED", "Alarms retrieved successfully", alarms);
     }
 

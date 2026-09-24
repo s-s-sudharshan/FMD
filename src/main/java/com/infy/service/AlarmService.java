@@ -1,15 +1,14 @@
 package com.infy.service;
 
-import java.util.List;
-
 import com.infy.dto.AlarmNoteUpdateRequestDto;
 import com.infy.dto.AlarmResponseDto;
 import com.infy.dto.AlarmSearchRequestDto;
 import com.infy.dto.BulkAlarmActionRequestDto;
+import com.infy.dto.PagedResponseDto;
 
 public interface AlarmService {
 
-    List<AlarmResponseDto> getAllAlarms(AlarmSearchRequestDto filter, int page);
+    PagedResponseDto<AlarmResponseDto> getAllAlarms(AlarmSearchRequestDto filter, int page);
 
     void acknowledgeAlarm(Long id);
 
@@ -23,8 +22,6 @@ public interface AlarmService {
 
     void updateNotes(Long id, AlarmNoteUpdateRequestDto request);
 
-    /**
-     * @return number of alarms ingested (created or re-occurred)
-     */
+    /** Ingests alarms from simulator XML (BE US16). @return number of alarms ingested (created or re-occurred). */
     int ingestAlarmsFromXml(String xml);
 }
