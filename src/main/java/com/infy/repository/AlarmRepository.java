@@ -1,5 +1,6 @@
 package com.infy.repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,12 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long>, JpaSpecific
     /** Rows of [AlarmStatus, Long count]; statuses with no alarms are absent. */
     @Query("select a.status, count(a) from Alarm a group by a.status")
     List<Object[]> countGroupedByStatus();
-    
-    /** Latest not-yet-terminated alarm of the same kind on a device; used to bump `occurrence` instead of duplicating. */
-    Optional<Alarm> findFirstByDeviceAndTrapAndSeverityAndStatusNotOrderByIdDesc(
-            Device device, TrapType trap, Severity severity, AlarmStatus status);
+
+    /**
+     * Latest alarm of the same kind on a device whose status is in the given set. Ingestion passes the
+     * active statuses (UNACKNOWLEDGED, ACKNOWLEDGED) so a duplicate event bumps `occurrence` on an
+     * active alarm, while a CLEARED/TERMINATED alarm is never matched (a new row is created instead).
+     */
+    Optional<Alarm> findFirstByDeviceAndTrapAndSeverityAndStatusInOrderByIdDesc(
+            Device device, TrapType trap, Severity severity, Collection<AlarmStatus> statuses);
 }

@@ -1,5 +1,7 @@
 package com.infy.dto;
 
+import java.time.LocalDateTime;
+
 import com.infy.enums.AlarmStatus;
 import com.infy.enums.DeviceType;
 import com.infy.enums.Severity;
@@ -24,4 +26,10 @@ public class AlarmResponseDto {
     private String notes;
     private Integer occurrence;
     private AlarmStatus status;
+    private String acknowledgedBy;
+    private LocalDateTime acknowledgedAt;
+    private String clearedBy;
+    private LocalDateTime clearedAt;
+    private String terminatedBy;
+    private LocalDateTime terminatedAt;
 }

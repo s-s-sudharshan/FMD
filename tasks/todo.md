@@ -206,12 +206,10 @@ No SecurityConfig / GlobalExceptionHandler / pom.xml change. Not built/run here 
 ## Phase 7 — Simulator (BE US16)
 - [x] simulator/AlarmXmlGenerator, AlarmXmlParser, AlarmSimulatorJob; config/SchedulingConfig
 - [x] AlarmService(Impl).ingestAlarmsFromXml (returns int); DeviceRepository.findByIpAddress/findAllByDeviceState;
-      AlarmRepository.findFirstByDeviceAndTrapAndSeverityAndStatusNotOrderByIdDesc
+      AlarmRepository.findFirstByDeviceAndTrapAndSeverityAndStatusInOrderByIdDesc (was `...StatusNot...` before Extra 3)
 - [x] application.properties — app.simulator.* (enabled, interval-ms, initial-delay-ms, max-alarms-per-run)
-- [x] Recurrence re-opens a non-terminated alarm (occurrence+1, status -> UNACKNOWLEDGED); TERMINATED match creates a new alarm
+- [x] Recurrence rule (revised in Extra 3): a duplicate correlates only to an active (UNACKNOWLEDGED/ACKNOWLEDGED) alarm and only bumps `occurrence`; a CLEARED/TERMINATED match creates a new UNACKNOWLEDGED row. The original "re-open to UNACKNOWLEDGED" rule was dropped.
 - [x] Verified: app starts, simulator inserts new alarms into the alarms table
-- [ ] Verify: ACKNOWLEDGED/CLEARED alarm re-opens to UNACKNOWLEDGED on recurrence
-- [ ] Verify: recurrence after TERMINATED creates a new row
 Not covered: unit/integration tests (Phase 6 skipped by request).
 
 ## Extra Features (extra-features-plan.md)
@@ -235,12 +233,20 @@ Not covered: unit/integration tests (Phase 6 skipped by request).
 - [x] Known quirk: user search escapes `%`/`_` through the Spring Data derived query, while device search does not because it uses a custom `@Query`. Therefore `%` and `_` act as wildcards for device search only; accepted per plan B2.
 - [ ] Verify: `search=OPER` matches `operator1`; `search=1001` and `search=192.168.1.1` match devices; blank search returns all; 101 characters returns 400; search combines with `state=DEACTIVATED`.
 
-### Extra 3 — Audit trail + recurrence re-open: pending
+### Extra 3 — Audit trail + active-alarm correlation
+
+- [x] entity/Alarm + dto/AlarmResponseDto: six nullable audit fields (`acknowledged/cleared/terminated` By + At)
+- [x] AlarmServiceImpl: injects CurrentUserResolver; `stamp()` sets status + only that transition's pair; bulk actions share one user + one timestamp; actor is resolved before any read/mutation
+- [x] AlarmRepository: `findFirstByDeviceAndTrapAndSeverityAndStatusInOrderByIdDesc` replaces the `...StatusNot...` method; ingestion correlates only UNACKNOWLEDGED/ACKNOWLEDGED, bumps `occurrence` only, and creates a new row otherwise
+- [x] enums/AlarmStatus javadoc updated to the new recurrence rule
+- [x] TableScript.sql / TableScript2.sql: six audit columns + ALTER statement for existing databases (needed because TableScript2 targets `ddl-auto=validate`)
+- [ ] Verify: ack/clear/terminate stamp their own pair only (terminate straight from ACKNOWLEDGED leaves the cleared pair null); bulk ack/clear share one user + time; pre-existing rows return six nulls and startup succeeds
+- [ ] Verify: repeat event on UNACKNOWLEDGED/ACKNOWLEDGED increments occurrence only (status + audit values preserved); repeat after CLEARED/TERMINATED creates a new UNACKNOWLEDGED row and leaves the old one unchanged
 
 ### Extra 4 — SSE: pending
 
 ### Housekeeping corrections to earlier entries
 
 - [x] Phase 2 post-review P1 (`SessionUserStatusFilter`) changed from open to **not built (decision)**; see `plan.md` Section 12.
-- [ ] Phase 7 recurrence re-open remains pending: `ingestAlarmsFromXml` currently increments only `occurrence`; it will be fixed in Extra 3.
+- [x] Phase 7 recurrence rule superseded by Extra 3 (see Phase 7 and Extra 3 above); the two old "re-open" verify items were removed.
 

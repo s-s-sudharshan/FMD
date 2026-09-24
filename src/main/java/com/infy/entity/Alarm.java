@@ -30,6 +30,10 @@ import lombok.Setter;
  * Fault/alarm raised by a monitored device. No @Data on entities -- see plan.md Lombok convention.
  * deviceIp/serialNumber/deviceType are deliberately denormalized copies so
  * alarm history stays readable even if the device is later edited/deactivated.
+ * The six acknowledged/cleared/terminated By/At fields are the audit trail
+ * (Extra 3): usernames are stored as plain strings, not foreign keys, so the
+ * history stays readable after a user is changed. All are nullable so rows
+ * created before the audit feature need no backfill.
  */
 @Entity
 @Table(name = "alarms")
@@ -83,6 +87,24 @@ public class Alarm {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column
+    private String acknowledgedBy;
+
+    @Column
+    private LocalDateTime acknowledgedAt;
+
+    @Column
+    private String clearedBy;
+
+    @Column
+    private LocalDateTime clearedAt;
+
+    @Column
+    private String terminatedBy;
+
+    @Column
+    private LocalDateTime terminatedAt;
 
     @PrePersist
     void onCreate() {

@@ -67,11 +67,42 @@ CREATE TABLE IF NOT EXISTS alarms (
     status        ENUM('UNACKNOWLEDGED','ACKNOWLEDGED','CLEARED','TERMINATED') NOT NULL DEFAULT 'UNACKNOWLEDGED',
     created_at    DATETIME(6)   NOT NULL,
     updated_at    DATETIME(6)   NOT NULL,
+    -- Audit trail (Extra 3): who/when for each transition. Nullable so pre-existing rows need no backfill.
+    acknowledged_by VARCHAR(255) NULL,
+    acknowledged_at DATETIME(6)  NULL,
+    cleared_by      VARCHAR(255) NULL,
+    cleared_at      DATETIME(6)  NULL,
+    terminated_by   VARCHAR(255) NULL,
+    terminated_at   DATETIME(6)  NULL,
     CONSTRAINT fk_alarm_device FOREIGN KEY (device_id) REFERENCES devices(id)
 );
+
+-- For a database whose alarms table already exists (CREATE TABLE IF NOT EXISTS above will not
+-- add columns to it), run this once instead:
+-- ALTER TABLE alarms
+--   ADD COLUMN acknowledged_by VARCHAR(255) NULL, ADD COLUMN acknowledged_at DATETIME(6) NULL,
+--   ADD COLUMN cleared_by      VARCHAR(255) NULL, ADD COLUMN cleared_at      DATETIME(6) NULL,
+--   ADD COLUMN terminated_by   VARCHAR(255) NULL, ADD COLUMN terminated_at   DATETIME(6) NULL;
  
-INSERT INTO alarms (device_id, device_ip, serial_number, device_type, severity, trap, notes, occurrence, status, created_at, updated_at)
-SELECT id, ip_address, serial_number, device_type, s.severity, s.trap, s.notes, s.occ, s.status, NOW(6), NOW(6)
+-- Seeded lifecycle states include matching audit values.  UNACKNOWLEDGED
+-- alarms deliberately keep every audit value NULL.
+INSERT INTO alarms (
+    device_id, device_ip, serial_number, device_type, severity, trap, notes, occurrence, status,
+    created_at, updated_at,
+    acknowledged_by, acknowledged_at,
+    cleared_by, cleared_at,
+    terminated_by, terminated_at
+)
+SELECT
+    id, ip_address, serial_number, device_type, s.severity, s.trap, s.notes, s.occ, s.status,
+    NOW(6), NOW(6),
+    CASE WHEN s.status IN ('ACKNOWLEDGED', 'CLEARED', 'TERMINATED') THEN 'manager1' END,
+    CASE WHEN s.status IN ('ACKNOWLEDGED', 'CLEARED', 'TERMINATED')
+         THEN DATE_SUB(NOW(6), INTERVAL 3 HOUR) END,
+    CASE WHEN s.status = 'CLEARED' THEN 'manager2' END,
+    CASE WHEN s.status = 'CLEARED' THEN DATE_SUB(NOW(6), INTERVAL 1 HOUR) END,
+    CASE WHEN s.status = 'TERMINATED' THEN 'manager3' END,
+    CASE WHEN s.status = 'TERMINATED' THEN DATE_SUB(NOW(6), INTERVAL 30 MINUTE) END
 FROM devices d
 JOIN (
     SELECT 'SN-1001' sn, 'CRITICAL' severity, 'CBGP_BACKWARD_TRANSITION' trap, 'BGP peer dropped' notes, 3 occ, 'UNACKNOWLEDGED' status

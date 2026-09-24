@@ -93,11 +93,25 @@ CREATE TABLE alarms (
     status        ENUM('UNACKNOWLEDGED','ACKNOWLEDGED','CLEARED','TERMINATED') NOT NULL DEFAULT 'UNACKNOWLEDGED',
     created_at    DATETIME(6)   NOT NULL,
     updated_at    DATETIME(6)   NOT NULL,
+    -- Audit trail (Extra 3): who/when for each transition. Nullable so pre-existing rows need no backfill.
+    acknowledged_by VARCHAR(255) NULL,
+    acknowledged_at DATETIME(6)  NULL,
+    cleared_by      VARCHAR(255) NULL,
+    cleared_at      DATETIME(6)  NULL,
+    terminated_by   VARCHAR(255) NULL,
+    terminated_at   DATETIME(6)  NULL,
     CONSTRAINT fk_alarm_device FOREIGN KEY (device_id) REFERENCES devices(id)
 );
 
+-- For an existing database created before Extra 3, run this once instead of re-running this script:
+-- ALTER TABLE alarms
+--   ADD COLUMN acknowledged_by VARCHAR(255) NULL, ADD COLUMN acknowledged_at DATETIME(6) NULL,
+--   ADD COLUMN cleared_by      VARCHAR(255) NULL, ADD COLUMN cleared_at      DATETIME(6) NULL,
+--   ADD COLUMN terminated_by   VARCHAR(255) NULL, ADD COLUMN terminated_at   DATETIME(6) NULL;
+
 -- Denormalised device columns are copied from the device row via the join.
 -- Covers every severity and status, plus a TERMINATED alarm and one on a deactivated device.
+-- Seeded rows leave the audit columns NULL (they were not produced by a logged-in manager).
 INSERT INTO alarms (device_id, device_ip, serial_number, device_type, severity, trap, notes, occurrence, status, created_at, updated_at)
 SELECT d.id, d.ip_address, d.serial_number, d.device_type, s.severity, s.trap, s.notes, s.occ, s.status, NOW(6), NOW(6)
 FROM devices d

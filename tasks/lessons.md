@@ -38,4 +38,5 @@
 - **Keep `todo.md` aligned with plan changes, not only code changes.** When a decision drops or defers work, update its checkbox immediately. Before marking a behavior as done, verify that the code actually implements it.
 
 - **Read uploaded plan files from disk first.** The conversation provides only the file path, not necessarily the file contents. 
-  
+
+- **When a later plan overrides an earlier lifecycle rule, sweep every place the old rule was written down.** The extra-features plan changed recurrence from "re-open" to "correlate only active alarms"; the enum javadoc, lessons and todo checkboxes all still described the old behaviour.

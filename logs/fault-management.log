@@ -3069,3 +3069,189 @@ Action:
 
 Identify and stop the process that's listening on port 8765 or configure this application to listen on another port.
 
+2026-09-24 22:05:57 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-24 22:05:57 INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-09-24 22:05:57 INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-09-24 22:06:24 INFO  com.infy.api.AuthAPI - Received login request for username: admin1
+2026-09-24 22:06:24 INFO  com.infy.service.AuthServiceImpl - Login attempt for username: admin1
+2026-09-24 22:06:24 INFO  com.infy.service.AuthServiceImpl - Login succeeded for username: admin1 with role: ADMIN
+2026-09-24 22:06:40 INFO  com.infy.api.UserAPI - Received get-all-users request for page 0 with search 'OPER'
+2026-09-24 22:06:40 INFO  com.infy.service.UserServiceImpl - Fetched user list page 0 search 'OPER' (6 of 6 total users, 1 page(s))
+2026-09-24 22:07:17 WARN  com.infy.exception.GlobalExceptionHandler - Access denied on /api/devices: Access Denied
+2026-09-24 22:07:17 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver - Resolved [org.springframework.security.access.AccessDeniedException: Access Denied]
+2026-09-24 22:08:26 INFO  com.infy.api.UserAPI - Received get-all-users request for page 0 with search 'NG'
+2026-09-24 22:08:26 INFO  com.infy.service.UserServiceImpl - Fetched user list page 0 search 'NG' (0 of 0 total users, 0 page(s))
+2026-09-24 22:09:55 INFO  com.infy.api.UserAPI - Received get-all-users request for page 0 with search 'OPER'
+2026-09-24 22:09:55 INFO  com.infy.service.UserServiceImpl - Fetched user list page 0 search 'OPER' (6 of 6 total users, 1 page(s))
+2026-09-24 22:10:17 INFO  com.infy.api.UserAPI - Received get-all-users request for page 0 with search 'nj'
+2026-09-24 22:10:17 INFO  com.infy.service.UserServiceImpl - Fetched user list page 0 search 'nj' (0 of 0 total users, 0 page(s))
+2026-09-24 22:10:53 INFO  com.infy.api.UserAPI - Received get-all-users request for page 1 with search 'oper'
+2026-09-24 22:10:53 INFO  com.infy.service.UserServiceImpl - Fetched user list page 1 search 'oper' (0 of 6 total users, 1 page(s))
+2026-09-24 22:11:17 INFO  com.infy.api.UserAPI - Received get-all-users request for page 0 with search 'null'
+2026-09-24 22:11:17 INFO  com.infy.service.UserServiceImpl - Fetched user list page 0 search 'null' (10 of 12 total users, 2 page(s))
+2026-09-24 22:11:25 INFO  com.infy.api.UserAPI - Received get-all-users request for page 2 with search 'null'
+2026-09-24 22:11:25 INFO  com.infy.service.UserServiceImpl - Fetched user list page 2 search 'null' (0 of 12 total users, 2 page(s))
+2026-09-24 22:11:33 INFO  com.infy.api.UserAPI - Received get-all-users request for page 1 with search 'null'
+2026-09-24 22:11:33 INFO  com.infy.service.UserServiceImpl - Fetched user list page 1 search 'null' (2 of 12 total users, 2 page(s))
+2026-09-24 22:12:41 INFO  com.infy.api.AuthAPI - Received login request for username: operator1
+2026-09-24 22:12:41 INFO  com.infy.service.AuthServiceImpl - Login attempt for username: operator1
+2026-09-24 22:12:42 INFO  com.infy.service.AuthServiceImpl - Login succeeded for username: operator1 with role: OPERATOR
+2026-09-24 22:12:54 WARN  com.infy.exception.GlobalExceptionHandler - Request binding/validation failed on /api/devices: ipAddress: IP address is required; serialNumber: Serial number is required; deviceType: Device type is required
+2026-09-24 22:12:54 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.infy.dto.ApiResponseDto<com.infy.dto.DeviceResponseDto>> com.infy.api.DeviceAPI.addDevice(com.infy.dto.DeviceRequestDto) with 3 errors: [Field error in object 'deviceRequestDto' on field 'ipAddress': rejected value [null]; codes [NotBlank.deviceRequestDto.ipAddress,NotBlank.ipAddress,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [deviceRequestDto.ipAddress,ipAddress]; arguments []; default message [ipAddress]]; default message [IP address is required]] [Field error in object 'deviceRequestDto' on field 'serialNumber': rejected value [null]; codes [NotBlank.deviceRequestDto.serialNumber,NotBlank.serialNumber,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [deviceRequestDto.serialNumber,serialNumber]; arguments []; default message [serialNumber]]; default message [Serial number is required]] [Field error in object 'deviceRequestDto' on field 'deviceType': rejected value [null]; codes [NotNull.deviceRequestDto.deviceType,NotNull.deviceType,NotNull.com.infy.enums.DeviceType,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [deviceRequestDto.deviceType,deviceType]; arguments []; default message [deviceType]]; default message [Device type is required]] ]
+2026-09-24 22:13:20 INFO  com.infy.api.DeviceAPI - Received get-devices request for page 0, state ACTIVATED and search '1001'
+2026-09-24 22:13:20 INFO  com.infy.service.DeviceServiceImpl - Fetched ACTIVATED device list page 0 search '1001' (1 of 1 total, 1 page(s))
+2026-09-24 22:13:48 INFO  com.infy.api.DeviceAPI - Received get-devices request for page 0, state ACTIVATED and search '192.168.1.1'
+2026-09-24 22:13:48 INFO  com.infy.service.DeviceServiceImpl - Fetched ACTIVATED device list page 0 search '192.168.1.1' (3 of 3 total, 1 page(s))
+2026-09-24 22:13:59 INFO  com.infy.api.DeviceAPI - Received get-devices request for page 0, state DEACTIVATED and search '1001'
+2026-09-24 22:13:59 INFO  com.infy.service.DeviceServiceImpl - Fetched DEACTIVATED device list page 0 search '1001' (0 of 0 total, 0 page(s))
+2026-09-24 22:14:18 INFO  com.infy.api.DeviceAPI - Received get-devices request for page 0, state ACTIVATED and search 'null'
+2026-09-24 22:14:18 INFO  com.infy.service.DeviceServiceImpl - Fetched ACTIVATED device list page 0 search 'null' (3 of 3 total, 1 page(s))
+2026-09-24 22:14:25 INFO  com.infy.api.DeviceAPI - Received get-devices request for page 0, state ACTIVATED and search 'null'
+2026-09-24 22:14:25 INFO  com.infy.service.DeviceServiceImpl - Fetched ACTIVATED device list page 0 search 'null' (3 of 3 total, 1 page(s))
+2026-09-25 01:44:08 INFO  org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2026-09-25 01:44:09 INFO  org.apache.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8765"]
+2026-09-25 01:44:09 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-25 01:44:09 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-09-25 01:44:09 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-09-25 01:44:09 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 32124 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-25 01:44:09 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-25 01:44:09 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-25 01:44:10 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-25 01:44:10 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 19 ms. Found 3 JPA repository interfaces.
+2026-09-25 01:44:10 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8765 (http)
+2026-09-25 01:44:10 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8765"]
+2026-09-25 01:44:10 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-25 01:44:10 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-25 01:44:10 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-25 01:44:10 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 695 ms
+2026-09-25 01:44:10 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-25 01:44:10 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-25 01:44:10 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-25 01:44:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-09-25 01:44:10 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@36c90f38
+2026-09-25 01:44:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-09-25 01:44:10 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-25 01:44:10 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-25 01:44:10 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-25 01:44:10 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1b73a140, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@25f41c6c, org.springframework.security.web.context.SecurityContextHolderFilter@390be8d6, org.springframework.security.web.header.HeaderWriterFilter@5b138cd5, org.springframework.web.filter.CorsFilter@67dda562, org.springframework.security.web.csrf.CsrfFilter@3bd9b64f, org.springframework.security.web.authentication.logout.LogoutFilter@7018f9e1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2ccff8f7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6b7dac9f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5768be59, org.springframework.security.web.session.SessionManagementFilter@4f1654b5, org.springframework.security.web.access.ExceptionTranslationFilter@a63e656, org.springframework.security.web.access.intercept.AuthorizationFilter@2c1382d2]
+2026-09-25 01:44:10 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-25 01:44:10 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8765"]
+2026-09-25 01:44:10 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8765 (http) with context path ''
+2026-09-25 01:44:10 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 1.396 seconds (process running for 13541.82)
+2026-09-25 01:44:10 INFO  org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-09-25 02:00:50 INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-09-25 02:00:50 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 34000 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-25 02:00:50 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-25 02:00:50 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-25 02:00:50 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-25 02:00:50 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-25 02:00:51 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-25 02:00:51 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 63 ms. Found 3 JPA repository interfaces.
+2026-09-25 02:00:52 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8765 (http)
+2026-09-25 02:00:52 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8765"]
+2026-09-25 02:00:52 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-25 02:00:52 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-25 02:00:52 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-25 02:00:52 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1812 ms
+2026-09-25 02:00:52 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-25 02:00:52 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-09-25 02:00:52 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-25 02:00:53 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-25 02:00:53 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-25 02:00:53 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4c8df802
+2026-09-25 02:00:53 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-25 02:00:54 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-25 02:00:54 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-25 02:00:54 INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-25 02:00:55 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-25 02:00:55 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@29c74612, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7472224a, org.springframework.security.web.context.SecurityContextHolderFilter@3a0cdfb3, org.springframework.security.web.header.HeaderWriterFilter@4b9d6550, org.springframework.web.filter.CorsFilter@3d4439, org.springframework.security.web.csrf.CsrfFilter@57186de1, org.springframework.security.web.authentication.logout.LogoutFilter@6b8b4cd7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7143bcf2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@714d2182, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2badadb1, org.springframework.security.web.session.SessionManagementFilter@26c6820c, org.springframework.security.web.access.ExceptionTranslationFilter@1e18ce42, org.springframework.security.web.access.intercept.AuthorizationFilter@676751f9]
+2026-09-25 02:00:56 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-25 02:00:56 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8765"]
+2026-09-25 02:00:56 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8765 (http) with context path ''
+2026-09-25 02:00:56 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 5.804 seconds (process running for 6.46)
+2026-09-25 02:01:50 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-25 02:01:50 INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-09-25 02:01:50 INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2026-09-25 02:02:30 INFO  com.infy.api.AuthAPI - Received login request for username: manager1
+2026-09-25 02:02:30 INFO  com.infy.service.AuthServiceImpl - Login attempt for username: manager1
+2026-09-25 02:02:30 INFO  com.infy.service.AuthServiceImpl - Login succeeded for username: manager1 with role: MANAGER
+2026-09-25 02:02:49 INFO  com.infy.api.AlarmAPI - Received get-alarms request for page 0 with filter AlarmSearchRequestDto(deviceIp=null, severity=null, status=null)
+2026-09-25 02:02:49 INFO  com.infy.service.AlarmServiceImpl - Fetched alarm list page 0 (7 of 7 total matching alarms, 1 page(s))
+2026-09-25 02:04:35 INFO  com.infy.api.AlarmAPI - Received acknowledge request for alarm 7
+2026-09-25 02:04:35 INFO  com.infy.service.AlarmServiceImpl - Alarm 7 moved to ACKNOWLEDGED by manager1
+2026-09-25 02:04:56 INFO  com.infy.api.AlarmAPI - Received get-alarms request for page 0 with filter AlarmSearchRequestDto(deviceIp=null, severity=null, status=null)
+2026-09-25 02:04:56 INFO  com.infy.service.AlarmServiceImpl - Fetched alarm list page 0 (7 of 7 total matching alarms, 1 page(s))
+2026-09-25 02:05:35 INFO  com.infy.api.AlarmAPI - Received clear request for alarm 5
+2026-09-25 02:05:35 INFO  com.infy.service.AlarmServiceImpl - Alarm 5 moved to CLEARED by manager1
+2026-09-25 02:06:00 INFO  com.infy.api.AlarmAPI - Received get-alarms request for page 0 with filter AlarmSearchRequestDto(deviceIp=null, severity=null, status=null)
+2026-09-25 02:06:00 INFO  com.infy.service.AlarmServiceImpl - Fetched alarm list page 0 (7 of 7 total matching alarms, 1 page(s))
+2026-09-25 02:06:57 INFO  com.infy.api.AlarmAPI - Received terminate request for alarm 6
+2026-09-25 02:06:57 INFO  com.infy.service.AlarmServiceImpl - Alarm 6 moved to TERMINATED by manager1
+2026-09-25 02:07:07 INFO  com.infy.api.AlarmAPI - Received get-alarms request for page 0 with filter AlarmSearchRequestDto(deviceIp=null, severity=null, status=null)
+2026-09-25 02:07:07 INFO  com.infy.service.AlarmServiceImpl - Fetched alarm list page 0 (6 of 6 total matching alarms, 1 page(s))
+2026-09-25 02:07:22 INFO  com.infy.api.AlarmAPI - Received get-alarms request for page 0 with filter AlarmSearchRequestDto(deviceIp=null, severity=null, status=TERMINATED)
+2026-09-25 02:07:22 INFO  com.infy.service.AlarmServiceImpl - Fetched alarm list page 0 (2 of 2 total matching alarms, 1 page(s))
+2026-09-25 02:07:56 INFO  com.infy.api.AlarmAPI - Received get-alarms request for page 0 with filter AlarmSearchRequestDto(deviceIp=null, severity=null, status=null)
+2026-09-25 02:07:56 INFO  com.infy.service.AlarmServiceImpl - Fetched alarm list page 0 (6 of 6 total matching alarms, 1 page(s))
+2026-09-25 02:08:41 INFO  com.infy.api.AlarmAPI - Received bulk acknowledge request for 3 alarm(s)
+2026-09-25 02:08:42 WARN  com.infy.service.AlarmServiceImpl - Bulk ACKNOWLEDGED rejected - alarms in an invalid state: [7]
+2026-09-25 02:08:42 WARN  com.infy.exception.GlobalExceptionHandler - Invalid alarm state transition: Only unacknowledged alarms can be acknowledged.
+2026-09-25 02:08:42 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver - Resolved [com.infy.exception.InvalidAlarmStateTransitionException: Service.ALARM_NOT_UNACKNOWLEDGED]
+2026-09-25 02:08:57 INFO  com.infy.api.AlarmAPI - Received bulk acknowledge request for 3 alarm(s)
+2026-09-25 02:08:57 INFO  com.infy.service.AlarmServiceImpl - 3 alarm(s) moved to ACKNOWLEDGED by manager1: [4, 2, 1]
+2026-09-25 02:09:56 INFO  com.infy.api.AlarmAPI - Received bulk clear request for 3 alarm(s)
+2026-09-25 02:09:56 WARN  com.infy.service.AlarmServiceImpl - Bulk CLEARED rejected - alarms in an invalid state: [8]
+2026-09-25 02:09:56 WARN  com.infy.exception.GlobalExceptionHandler - Invalid alarm state transition: Alarm must be acknowledged before it can be cleared.
+2026-09-25 02:09:56 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver - Resolved [com.infy.exception.InvalidAlarmStateTransitionException: Service.ALARM_NOT_ACKNOWLEDGED]
+2026-09-25 02:10:06 INFO  com.infy.api.AlarmAPI - Received bulk clear request for 2 alarm(s)
+2026-09-25 02:10:06 INFO  com.infy.service.AlarmServiceImpl - 2 alarm(s) moved to CLEARED by manager1: [4, 1]
+2026-09-25 02:10:19 WARN  com.infy.exception.GlobalExceptionHandler - Request binding/validation failed on /api/alarms/clear/bulk: alarmIds: At least one alarm id is required
+2026-09-25 02:10:19 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.infy.dto.ApiResponseDto<java.lang.Void>> com.infy.api.AlarmAPI.clearBulk(com.infy.dto.BulkAlarmActionRequestDto): [Field error in object 'bulkAlarmActionRequestDto' on field 'alarmIds': rejected value [[]]; codes [NotEmpty.bulkAlarmActionRequestDto.alarmIds,NotEmpty.alarmIds,NotEmpty.java.util.List,NotEmpty]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [bulkAlarmActionRequestDto.alarmIds,alarmIds]; arguments []; default message [alarmIds]]; default message [At least one alarm id is required]] ]
+2026-09-25 02:10:42 INFO  com.infy.api.AuthAPI - Received logout request
+2026-09-25 02:10:42 INFO  com.infy.service.AuthServiceImpl - Logout requested for username: manager1
+2026-09-25 02:12:26 INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-09-25 02:12:26 INFO  com.infy.FaultManagementApplication - Starting FaultManagementApplication using Java 21.0.10 with PID 9588 (C:\Users\sudha\Downloads\fault-management\target\classes started by sudha in C:\Users\sudha\Downloads\fault-management)
+2026-09-25 02:12:26 DEBUG com.infy.FaultManagementApplication - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-09-25 02:12:26 INFO  com.infy.FaultManagementApplication - No active profile set, falling back to 1 default profile: "default"
+2026-09-25 02:12:26 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-09-25 02:12:26 INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-09-25 02:12:27 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-25 02:12:27 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 51 ms. Found 3 JPA repository interfaces.
+2026-09-25 02:12:28 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8765 (http)
+2026-09-25 02:12:28 INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8765"]
+2026-09-25 02:12:28 INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-09-25 02:12:28 INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-09-25 02:12:28 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-09-25 02:12:28 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1726 ms
+2026-09-25 02:12:29 INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-25 02:12:29 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-09-25 02:12:29 INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-09-25 02:12:29 INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-25 02:12:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-09-25 02:12:29 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2058038c
+2026-09-25 02:12:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-09-25 02:12:30 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-25 02:12:30 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-25 02:12:30 INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-25 02:12:31 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-25 02:12:32 INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@28cce303, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@43c17510, org.springframework.security.web.context.SecurityContextHolderFilter@1c5927fc, org.springframework.security.web.header.HeaderWriterFilter@66e17166, org.springframework.web.filter.CorsFilter@64c46c4c, org.springframework.security.web.csrf.CsrfFilter@8aae07d, org.springframework.security.web.authentication.logout.LogoutFilter@23bb266, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7c05ba8c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@22dbb976, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7f24810f, org.springframework.security.web.session.SessionManagementFilter@515b6da4, org.springframework.security.web.access.ExceptionTranslationFilter@54a112a1, org.springframework.security.web.access.intercept.AuthorizationFilter@78d8d7f]
+2026-09-25 02:12:32 INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-09-25 02:12:32 INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8765"]
+2026-09-25 02:12:32 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8765 (http) with context path ''
+2026-09-25 02:12:32 INFO  com.infy.FaultManagementApplication - Started FaultManagementApplication in 5.88 seconds (process running for 6.538)
+2026-09-25 02:12:42 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-25 02:12:42 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)
+2026-09-25 02:13:02 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-25 02:13:02 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)
+2026-09-25 02:13:22 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-25 02:13:22 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)
+2026-09-25 02:13:42 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-25 02:13:42 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)
+2026-09-25 02:14:02 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-25 02:14:02 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)
+2026-09-25 02:14:22 INFO  com.infy.service.AlarmServiceImpl - Ingested 2 alarm(s) from XML
+2026-09-25 02:14:22 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 2 alarm(s)
+2026-09-25 02:14:43 INFO  com.infy.service.AlarmServiceImpl - Ingested 1 alarm(s) from XML
+2026-09-25 02:14:43 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 1 alarm(s)
+2026-09-25 02:15:03 INFO  com.infy.service.AlarmServiceImpl - Ingested 3 alarm(s) from XML
+2026-09-25 02:15:03 INFO  com.infy.simulator.AlarmSimulatorJob - Simulator run ingested 3 alarm(s)

@@ -1,5 +1,6 @@
 package com.infy.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
@@ -32,12 +33,13 @@ import com.infy.exception.AlarmNotFoundException;
 import com.infy.exception.InvalidAlarmStateTransitionException;
 import com.infy.repository.AlarmRepository;
 import com.infy.repository.DeviceRepository;
+import com.infy.security.CurrentUserResolver;
 import com.infy.simulator.AlarmXmlParser;
 
 import jakarta.persistence.criteria.Predicate;
 
 /**
- * BE US12-US15 (Phase 4 Manager Fault Handling).
+ * BE US12-US15 (Phase 4 Manager Fault Handling) plus audit trail (Extra 3).
  *
  * Entity->DTO mapping is done by hand here (not ModelMapper): Alarm carries
  * both denormalized fields (deviceIp, serialNumber, deviceType) and a
@@ -45,7 +47,9 @@ import jakarta.persistence.criteria.Predicate;
  * ModelMapper's implicit matching ambiguous and fails at startup.
  *
  * Bulk operations are all-or-nothing: every id is validated before any
- * status is changed, inside one transaction.
+ * status is changed, inside one transaction. A bulk action stamps every alarm
+ * with the same user and timestamp. The actor always comes from the security
+ * context (CurrentUserResolver), never from a request body.
  */
 @Service
 public class AlarmServiceImpl implements AlarmService {
@@ -58,6 +62,9 @@ public class AlarmServiceImpl implements AlarmService {
     private static final Set<AlarmStatus> CLEAR_FROM = EnumSet.of(AlarmStatus.ACKNOWLEDGED);
     private static final Set<AlarmStatus> TERMINATE_FROM = EnumSet.of(AlarmStatus.ACKNOWLEDGED, AlarmStatus.CLEARED);
 
+    /** Statuses a duplicate simulator event may correlate to. CLEARED/TERMINATED alarms are never modified by ingestion. */
+    private static final Set<AlarmStatus> ACTIVE = EnumSet.of(AlarmStatus.UNACKNOWLEDGED, AlarmStatus.ACKNOWLEDGED);
+
     @Autowired
     private AlarmRepository alarmRepository;
 
@@ -66,6 +73,9 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Autowired
     private AlarmXmlParser alarmXmlParser;
+
+    @Autowired
+    private CurrentUserResolver currentUserResolver;
 
     @Override
     @Transactional(readOnly = true)
@@ -118,6 +128,13 @@ public class AlarmServiceImpl implements AlarmService {
         logger.info("Notes updated for alarm {}", id);
     }
 
+    /**
+     * Correlation rule: a duplicate event (same device + trap + severity) only matches an ACTIVE
+     * alarm (UNACKNOWLEDGED/ACKNOWLEDGED). It increments `occurrence` and changes nothing else --
+     * not the status, not the audit fields, not the notes. If the latest match is CLEARED or
+     * TERMINATED (or there is none), a new UNACKNOWLEDGED alarm is created with occurrence 1 and
+     * null audit fields, and the completed row stays untouched.
+     */
     @Override
     @Transactional
     public int ingestAlarmsFromXml(String xml) {
@@ -130,8 +147,8 @@ public class AlarmServiceImpl implements AlarmService {
             }
             Device device = found.get();
             Optional<Alarm> existing = alarmRepository
-                    .findFirstByDeviceAndTrapAndSeverityAndStatusNotOrderByIdDesc(
-                            device, p.trap(), p.severity(), AlarmStatus.TERMINATED);
+                    .findFirstByDeviceAndTrapAndSeverityAndStatusInOrderByIdDesc(
+                            device, p.trap(), p.severity(), ACTIVE);
             if (existing.isPresent()) {
                 Alarm alarm = existing.get();
                 alarm.setOccurrence(alarm.getOccurrence() + 1);
@@ -178,17 +195,20 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     private void transition(Long id, Set<AlarmStatus> allowedFrom, AlarmStatus target, String errorKey) {
+        // Resolved first so an unauthenticated call fails before anything is read or changed.
+        String actor = currentUserResolver.getCurrentUsername();
         Alarm alarm = findAlarm(id);
         if (!allowedFrom.contains(alarm.getStatus())) {
             logger.warn("Alarm {} cannot move {} -> {}", id, alarm.getStatus(), target);
             throw new InvalidAlarmStateTransitionException(errorKey);
         }
-        alarm.setStatus(target);
+        stamp(alarm, target, actor, LocalDateTime.now());
         alarmRepository.save(alarm);
-        logger.info("Alarm {} moved to {}", id, target);
+        logger.info("Alarm {} moved to {} by {}", id, target, actor);
     }
 
     private void transitionBulk(List<Long> ids, Set<AlarmStatus> allowedFrom, AlarmStatus target, String errorKey) {
+        String actor = currentUserResolver.getCurrentUsername();
         Set<Long> uniqueIds = new LinkedHashSet<>(ids);
         List<Alarm> alarms = alarmRepository.findAllById(uniqueIds);
         if (alarms.size() != uniqueIds.size()) {
@@ -203,9 +223,30 @@ public class AlarmServiceImpl implements AlarmService {
             logger.warn("Bulk {} rejected - alarms in an invalid state: {}", target, invalid);
             throw new InvalidAlarmStateTransitionException(errorKey);
         }
-        alarms.forEach(a -> a.setStatus(target));
+        LocalDateTime now = LocalDateTime.now(); // one user + one timestamp for the whole batch
+        alarms.forEach(a -> stamp(a, target, actor, now));
         alarmRepository.saveAll(alarms);
-        logger.info("{} alarm(s) moved to {}: {}", alarms.size(), target, uniqueIds);
+        logger.info("{} alarm(s) moved to {} by {}: {}", alarms.size(), target, actor, uniqueIds);
+    }
+
+    /** Sets the new status and only that transition's audit pair; earlier pairs stay intact. */
+    private void stamp(Alarm alarm, AlarmStatus target, String actor, LocalDateTime at) {
+        alarm.setStatus(target);
+        switch (target) {
+            case ACKNOWLEDGED -> {
+                alarm.setAcknowledgedBy(actor);
+                alarm.setAcknowledgedAt(at);
+            }
+            case CLEARED -> {
+                alarm.setClearedBy(actor);
+                alarm.setClearedAt(at);
+            }
+            case TERMINATED -> {
+                alarm.setTerminatedBy(actor);
+                alarm.setTerminatedAt(at);
+            }
+            default -> throw new IllegalArgumentException("No audit stamp for status " + target);
+        }
     }
 
     private Alarm findAlarm(Long id) {
@@ -224,6 +265,12 @@ public class AlarmServiceImpl implements AlarmService {
                 .notes(a.getNotes())
                 .occurrence(a.getOccurrence())
                 .status(a.getStatus())
+                .acknowledgedBy(a.getAcknowledgedBy())
+                .acknowledgedAt(a.getAcknowledgedAt())
+                .clearedBy(a.getClearedBy())
+                .clearedAt(a.getClearedAt())
+                .terminatedBy(a.getTerminatedBy())
+                .terminatedAt(a.getTerminatedAt())
                 .build();
     }
 }
