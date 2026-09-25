@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.infy.entity.Device;
@@ -13,15 +12,16 @@ import com.infy.enums.Severity;
 import com.infy.enums.TrapType;
 import com.infy.repository.DeviceRepository;
 
-/** Builds a random batch of alarms, as XML, for the currently ACTIVATED devices (BE US16). */
+/**
+ * Builds a batch of alarm XML: one entry per currently ACTIVATED device
+ * (BE US16 decision -- "one alarm XML entry for every active device" per
+ * generation run, replacing the earlier random-count/random-device pick).
+ */
 @Component
 public class AlarmXmlGenerator {
 
     @Autowired
     private DeviceRepository deviceRepository;
-
-    @Value("${app.simulator.max-alarms-per-run:3}")
-    private int maxAlarmsPerRun;
 
     /** @return the XML, or null when there are no active devices to raise alarms for. */
     public String generate() {
@@ -32,12 +32,10 @@ public class AlarmXmlGenerator {
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
         Severity[] severities = Severity.values();
         TrapType[] traps = TrapType.values();
-        int count = rnd.nextInt(1, Math.max(1, maxAlarmsPerRun) + 1);
 
         // Values are enums / validated IPv4 strings, so no XML escaping is needed.
         StringBuilder xml = new StringBuilder("<alarms>");
-        for (int i = 0; i < count; i++) {
-            Device d = devices.get(rnd.nextInt(devices.size()));
+        for (Device d : devices) {
             xml.append("<alarm>")
                .append("<deviceIp>").append(d.getIpAddress()).append("</deviceIp>")
                .append("<severity>").append(severities[rnd.nextInt(severities.length)]).append("</severity>")
