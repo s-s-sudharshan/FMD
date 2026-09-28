@@ -14,7 +14,6 @@ public class LoginRequestDto {
 
     @NotBlank(message = "{auth.username.absent}")
     private String username;
-
     @NotBlank(message = "{auth.password.absent}")
     private String password;
 }
